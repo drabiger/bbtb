@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="ISO-8859-1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="google-signin-client_id" content="290685487945-bs2eir89lom13ffq89850jdth5ir2niv.apps.googleusercontent.com">
+	<title>BBTB: Login</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #customBtn {
+      width: 100%;
+      display: inline-block;
+      vertical-align: middle;
+      padding-left: 42px;
+      padding-right: 42px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      /* Use the Roboto font that is loaded in the <head> */
+      font-family: 'Roboto-Medium', sans-serif;
+    }
+    
+    #customBtn .icon img {
+      cursor: pointer;
+      display: block;
+      margin: auto;
+    }
+    
+  </style>
+
+</head>
+
+<script type="text/javascript" src="js/lib/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<script src="https://apis.google.com/js/api:client.js"></script>
+<script type="text/javascript" src="js/bbtb/login.js"></script>
+
+<body>
+	<div id="loginModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true">
+	  <div class="modal-dialog">
+		  <div class="modal-content">
+		      <div class="modal-header">
+		          <h1 class="text-center">Login to BBTB</h1>
+		      	  <center>Currently, only Google OAuth login is supported.</center>
+		      </div>
+		      <div id="gSignInWrapper">
+    			<div id="customBtn">
+      				<div class="icon"><img src="images/sign-in-buttons/g+_signin_short.png"></div>
+    			</div>
+  		      </div>
+ 			  <script>appStart();</script>
+ 			  <div class="modal-footer" id="login-feedback" style="display: none; text-align: center; font-style: italic; width: 100%; margin: auto;">
+		      </div>
+		  </div>
+	  </div>
+	</div>
+</body>
+</html>

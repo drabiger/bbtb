@@ -1,0 +1,7 @@
+.glyphicon:hover, .glyphicon:focus {
+	color: #ff8080;
+}
+
+table .min {
+	width: 10px;
+}

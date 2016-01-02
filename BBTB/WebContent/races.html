@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html ng-app="bbtb">
+<head>
+<meta charset="ISO-8859-1">
+<title>BBTB</title>
+</head>
+
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="css/standard.css" />
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<script type="text/javascript" src="js/bbtb/raceController.js"></script>
+
+<body class="container" ng-controller="RaceController as controller">
+	<h1>Welcome to BBTB!</h1>
+	<h2>{{controller.races.length}} Races</h2>
+	
+	<table class="table">
+	<thead><tr><th class="col-md-2">Race</th><th class="col-md-9">Positions</th><th class="min">&nbsp;</th></tr></thead>
+	<tbody>
+		<tr ng-repeat-start="race in controller.races" ng-class="{active : race.client_dirty}">
+			<td ng-hide="race.client_dirty" ng-click="race.client_dirty = true">{{race.name}}</td>
+			<td ng-show="race.client_dirty"><form><input show-focus="race.client_dirty" ng-blur="controller.save();" ng-model="race.name"/></form></td>
+			<td><span ng-repeat="pos in race.positions">{{pos.quantity}}&nbsp;{{pos.name}}<span ng-if="$index < race.positions.length-1">, </span></span></td>
+			<td><a href="#" ng-click="controller.deleteRace(race.uuid)"><i class="glyphicon glyphicon-remove"></i></a></td>
+		</tr>
+		<tr ng-repeat-end></tr>
+	</tbody>
+	</table>
+	<button type="button" class="btn btn-default" ng-click="controller.addRow()">Create Race</button>
+</body>
+</html>

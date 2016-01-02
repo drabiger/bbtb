@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BBTB: Create User Account</title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="css/standard.css" />
+<link rel="stylesheet" type="text/css" href="css/nav-top.css" />
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+
+<script type="text/javascript" data-main="js/createUser.js"
+	src="js/lib/require.js"></script>
+
+<body>
+	<div class="container" ng-controller="UserController as user">
+		<div class="container"
+			ng-controller="UserCreateFormController as userCreationForm">
+			<div class="page-header">
+				<h1>
+					Blood Bowl Tactics Board<br> <small>Create User
+						Account</small>
+				</h1>
+			</div>
+			<div class="row">
+				<div class="col-md-8 col-md-offset 4">
+					<div ng-hide="isAuthenticated">
+						<div ng-show="user.googleAuthOK">
+							<div ng-show="user.isAuthenticated">BBTB Authentication
+								succeeded, as well! Why are we here?</div>
+							<div ng-hide="user.isAuthenticated">
+								<p class="lead">Enter account details</p>
+								<form class="form-horizontal" name="form">
+									<div class="form-group">
+										<label for="email" class="col-md-4 control-label">Google
+											Account</label>
+										<div class="col-md-8">
+											<input type="email" class="form-control" id="email"
+												aria-describedby="helpEmail" value="{{user.googleEmail}}"
+												disabled>
+										</div>
+										<div class="col-md-4"></div>
+										<span id="helpEmail" class="col-md-8 help-block">BBTB
+											will store your Google account name. This information will
+											not be available to other users.</span>
+									</div>
+									<div class="form-group" ng-class="{'has-error': form.displayName.$error.minlength || form.displayName.$error.maxlength}">
+										<label for="displayName" class="col-md-4 control-label">Display
+											Name</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control" id="displayName"
+												placeholder="e.g., Jim Johnson" name="displayName"
+												aria-describedby="helpDisplayName" ng-model="userCreationForm.displayName" ng-minlength="3" ng-maxlength="15" required>
+										</div>
+										<div class="col-md-4"></div>
+										<span id="helpDisplayName" ng-hide="form.displayName.$error.minlength || form.displayName.$error.maxlength" class="col-md-8 help-block">This
+											will be the name under which you will be known to other BBTB
+											users.</span>
+										<span class="col-md-8 help-block" ng-show="form.displayName.$error.minlength">You need to enter at least three characters.</span>
+										<span class="col-md-8 help-block" ng-show="form.displayName.$error.maxlength">You cannot use more than 15 characters.</span>
+									</div>
+									<div class="form-group">
+										<label for="g-recaptcha" class="col-md-4 control-label">Please Click the Box</label>
+										<div class="col-md-8">
+											<div class="g-recaptcha" id="g-recaptcha" data-callback="captchaCallback" data-sitekey="6Ldk_BMTAAAAAKvUZOGGMYGhguLdMfRxC0iYHdxb"></div>
+										</div>
+										<div class="col-md-4"></div>
+										<span class="col-md-8 help-block">This is a test to prevent robots creating user accounts.</span>
+									</div>
+									<div class="form-group">
+										<div class="col-md-4"></div>
+										<div class="col-md-8">
+											<button disabled id="submitButton" type="submit" class="btn btn-primary btn-lg btn-block" ng-click="userCreationForm.createAccount(user)">Create User Account</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+						<div ng-hide="user.googleAuthOK">
+							<p class="lead">Connect to Google</p>
+							<p>Before BBTB can create a user account, Google needs to
+								verify your identity. When you click on the button below Google
+								will ask if you want to grant BBTB access to your profile data.
+								You will need to accept the request in order to proceed.</p>
+							<div id="customBtn"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="panel panel-info">
+						<div class="panel-heading">
+							<span class="label label-info">Info</span> What happens if I
+							create a user account?
+						</div>
+						<div class="panel-body">
+							<p>
+								The basic idea is that BBTB stores only a <em>minimum of
+									your personal data</em>. The data you create in BBTB will be
+								protected.
+							</p>
+							<p>When creating a BBTB user account, BBTB will ask for
+								permission to access basic profile information from your Google
+								account. Note that only your email address will be stored. BBTB
+								will not use your real name from Google. Instead, you will be
+								asked for a display name that will appear next to content that
+								you would like to be visible to other BBTB users.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

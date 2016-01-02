@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BBTB: Board</title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="css/standard.css" />
+<link rel="stylesheet" type="text/css" href="css/board.css" />
+</head>
+
+<script type="text/javascript" data-main="js/board.js"
+	src="js/lib/require.js"></script>
+
+<body>
+	<div class="container" ng-controller="UserController as user">
+		<div class="container" ng-controller="BoardController as controller">
+			<div ng-include="'nav-top.html'"></div>
+			<div ng-hide="user.loggedIn" class="row">
+				<p>{{user.authStatusMessage}}</p>
+			</div>
+			<div ng-show="user.loggedIn" class="row">
+				<div class="col-md-9">
+					<table id="TABLE" class="bbtb-board">
+						<tbody>
+							<tr ng-repeat="row in controller.getBoard()"
+								ng-init="rowIdx = $index;">
+								<td ng-repeat="col in row track by $index"
+									ng-init="colIdx = $index;"
+									title="({{controller.getModelRowValue(rowIdx,colIdx)}},{{controller.getModelColValue(rowIdx,colIdx)}})"
+									x-bbtb-board-x="{{controller.getModelRowValue(rowIdx,colIdx)}}"
+									x-bbtb-board-y="{{controller.getModelColValue(rowIdx,colIdx)}}"
+									ng-style="controller.getBoardCellStyle(rowIdx,colIdx)"
+									ng-attr-id="{{'bbtbCell_'+controller.getModelRowValue(rowIdx,colIdx)+'_'+controller.getModelColValue(rowIdx,colIdx)}}"
+									x-bbtb-placement="{{controller.getBoardPlacement(rowIdx,colIdx)}}"
+									draggable="{{controller.getBoardPlacement(rowIdx,colIdx).length>0}}"
+									ng-class="{
+									'bbtb-boardCell':col=='x' || col=='o',
+									'bbtb-boardCell-verticaldividerLine': col=='|', 
+									'bbtb-boardCell-middleline' : col=='=',
+									'bbtb-boardCell-smallLine' : col=='-'}">
+									{{controller.getBoardCells(rowIdx,colIdx)}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-md-3">
+					<div class="affix">
+						<div id="bbtb-generalSettingsPanel" class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">About</h3>
+							</div>
+							<div class="row panel-body">
+								<div class="col-sm-4" ng-init="boardNameClicked = false;">Board
+									Name</div>
+								<div class="col-sm-8" ng-hide="boardNameClicked"
+									ng-click="boardNameClicked = true">
+									<a href="#">{{controller.boardModelName()}} <i
+										class="glyphicon glyphicon-pencil"></i></a>
+								</div>
+								<div class="col-sm-8" ng-show="boardNameClicked">
+									<form>
+										<input show-focus="boardNameClicked"
+											ng-blur="controller.saveBoardModelName(); boardNameClicked=false;"
+											ng-model="controller.boardModelName"
+											ng-model-options="{ getterSetter: true }" />
+									</form>
+								</div>
+							</div>
+						</div>
+						<div id="bbtb-race1" class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">{{controller.getRace1Model().name}}</h3>
+							</div>
+							<div class="panel-body">
+								<table class="bbtb-board-racetable">
+									<tr ng-repeat="pos in controller.getRace1Model().positions">
+										<td class="bbtb-boardCell"
+											ng-style="controller.getRace1CellStyle()" draggable="true"
+											x-bbtb-board-x="new" x-bbtb-board-y="new"
+											x-bbtb-position="{{pos.uuid}}">{{pos.abbreviation}}</td>
+										<td>{{pos.name}}</td>
+										<td>{{controller.getRacePositionRemainingQuantity(pos)}}</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div id="bbtb-race2" class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">{{controller.getRace2Model().name}}</h3>
+							</div>
+							<div class="panel-body">
+								<table class="bbtb-board-racetable">
+									<tr ng-repeat="pos in controller.getRace2Model().positions">
+										<td class="bbtb-boardCell"
+											ng-style="controller.getRace2CellStyle()" draggable="true"
+											x-bbtb-board-x="new" x-bbtb-board-y="new"
+											x-bbtb-position="{{pos.uuid}}">{{pos.abbreviation}}</td>
+										<td>{{pos.name}}</td>
+										<td>{{controller.getRacePositionRemainingQuantity(pos)}}</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

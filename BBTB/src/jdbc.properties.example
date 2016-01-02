@@ -1,0 +1,3 @@
+jdbc.url=jdbc:sqlserver://localhost:1433;DatabaseName=BBTB
+jdbc.username=
+jdbc.password=

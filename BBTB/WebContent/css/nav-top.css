@@ -1,0 +1,32 @@
+#customBtn {
+  width: 100%;
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 5px;
+  padding-bottom: 0px;
+  font-size: 12px;
+  font-weight: bold;
+  /* Use the Roboto font that is loaded in the <head> */
+  font-family: 'Roboto-Medium', sans-serif;
+}
+
+#customBtn {
+  cursor: pointer;
+  display: block;
+  margin: auto;
+  background: url('../images/sign-in-buttons/btn_google_signin_dark_normal_web.png');
+  width: 193px;
+  height: 48px;
+}
+
+#customBtn:hover {
+    background: url('../images/sign-in-buttons/btn_google_signin_dark_focus_web.png');
+}
+
+#bbtb-userCreation {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+}

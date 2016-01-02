@@ -1,0 +1,65 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"	
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans	
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+ 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+ 
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd">
+ 
+	<context:component-scan base-package="net.raebiger.bbtb.*" />
+ 
+	<!-- ************ JPA configuration *********** -->
+	<tx:annotation-driven transaction-manager="transactionManager" />  
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="BBTBUnit" />        
+        <property name="dataSource" ref="dataSource" />
+        <property name="packagesToScan" value="net.raebiger.bbtb.*" />
+		<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
+		<!-- 
+		<property name="jpaDialect" ref="jpaDialect" />
+		 -->
+   	 	<property name="jpaProperties">
+        	<props>
+            	<prop key="hibernate.hbm2ddl.auto">create</prop>
+            	<prop key="hibernate.show_sql">true</prop>
+        	</props>
+    	</property>
+    </bean>     
+	<bean id="jpaVendorAdapter"	class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+		<property name="database" value="SQL_SERVER" />
+		<property name="databasePlatform" value="org.hibernate.dialect.SQLServerDialect" />
+		<property name="showSql" value="true"/>
+	</bean>
+	<!-- 
+    <bean id="jpaDialect" class="org.hibernate.dialect.SQLServerDialect" />
+     -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+		<property name="dataSource" ref="dataSource" />
+		<!-- 
+		<property name="jpaDialect" ref="jpaDialect" />
+		 -->
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+ 
+ 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location"><value>classpath:jdbc.properties</value></property>
+    </bean>
+    
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	
+	<bean id="databaseInit" class="net.raebiger.bbtb.model.init.DatabaseInit" init-method="initialize">
+		<!-- <property name="dataSource" ref="dataSource" /> -->
+	</bean>
+</beans>

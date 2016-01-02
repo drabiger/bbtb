@@ -1,0 +1,64 @@
+body { 
+	padding-top: 70px; /* required for bootstrap's navbar-fixed-top */ 
+}
+
+#bbtb-generalSettingsPanel input {
+	width: 100%;
+}
+
+#bbtb-generalSettingsPanel a:hover{
+	text-decoration: none;
+}
+
+.bbtb-board-racetable {
+	border-spacing: 0.4rem;
+	border-collapse: separate;
+	width: 100%; 
+}
+
+.bbtb-board {
+	border: 1px solid black;
+	border-spacing: 0.4rem;
+	border-collapse: separate;
+	background: #686868;
+	/* don't resize table horizontally when windows resizes */
+	table-layout: fixed;
+	width: 675px; /* = 15 * (td-width + 5), falls border-spacing=0.4rem*/
+	/* rounded corners for table */
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+}
+
+.bbtb-boardCell {
+	padding: 0.5rem; /* Abstand Zelleninhalt zum Rand */
+	background: #A0A0A0;
+	width: 40px;
+	height: 40px;
+	overflow: hidden;
+	white-space: nowrap;
+	font-size: 18px; /* implicitly: height will be at least this big */
+	line-height: 1px; /* implicitly: influence on height */
+	text-align: center;
+	/* rounded corners */
+	border-radius: 4px;
+	-moz-border-radius: 6px;
+}
+
+.bbtb-board .bbtb-boardCell-middleline {
+	background: black;
+	height: 2px;
+}
+
+.bbtb-board .bbtb-boardCell-smallLine {
+	background: black;
+	height: 4px;
+}
+
+.bbtb-board .bbtb-boardCell-verticaldividerLine {
+	background: black;
+	width: 1px;
+}
+
+.bbtb-board .bbtb-boardCell .dndOver {
+	border: 2px dashed black !important;
+}

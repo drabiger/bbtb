@@ -1,0 +1,180 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>BBTB</groupId>
+  <artifactId>BBTB</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <warSourceDirectory>WebContent</warSourceDirectory>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+	  <plugin>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>${jetty.version}</version>
+      </plugin>
+    </plugins>
+  </build>
+  
+  
+  <properties>
+		<spring.version>4.1.7.RELEASE</spring.version>
+		<hibernate.version>4.3.8.Final</hibernate.version>
+		<jetty.version>9.1.0.v20131115</jetty.version>
+		<jersey.version>2.19</jersey.version>
+		<hsqldb.version>2.3.2</hsqldb.version>
+  </properties>
+  
+  <dependencies>
+    <dependency>
+        <groupId>net.raebiger.bbtb</groupId>
+        <artifactId>jdbc-mssql</artifactId>
+        <version>1.0</version>
+        <scope>system</scope>
+        <systemPath>${basedir}/WebContent/WEB-INF/lib/sqljdbc4.jar</systemPath>
+    </dependency>
+  
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-core</artifactId>
+        <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-web</artifactId>
+        <version>${spring.version}</version>
+    </dependency>
+	<dependency>
+   		<groupId>org.springframework</groupId>
+   		<artifactId>spring-orm</artifactId>
+   		<version>${spring.version}</version>
+	</dependency>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-test</artifactId>
+        <version>${spring.version}</version>
+    </dependency>	
+  
+  	<dependency>
+    	<groupId>javax</groupId>
+    	<artifactId>javaee-api</artifactId>
+    	<version>7.0</version>
+	</dependency>
+  	<dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-entitymanager</artifactId>
+        <version>${hibernate.version}</version>
+    </dependency>
+    <dependency>
+       <groupId>net.sf.ehcache</groupId>
+       <artifactId>ehcache-core</artifactId>
+       <version>2.2.0</version>
+   </dependency>
+   
+   <dependency>
+   	   <groupId>org.hsqldb</groupId>
+       <artifactId>hsqldb</artifactId>
+       <version>${hsqldb.version}</version>
+   </dependency>
+   
+   <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+      <scope>provided</scope>
+   </dependency>
+   
+   <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
+      <version>9.3.0.RC1</version>
+   </dependency>
+ 
+ 
+	<dependency>
+		<groupId>org.glassfish.jersey.containers</groupId>
+    	<!-- if your container implements Servlet API older than 3.0, use "jersey-container-servlet-core"  -->
+    	<artifactId>jersey-container-servlet</artifactId>
+    	<version>${jersey.version}</version>
+	</dependency>
+	<!-- Required only when you are using JAX-RS Client -->
+	<dependency>
+    	<groupId>org.glassfish.jersey.core</groupId>
+    	<artifactId>jersey-client</artifactId>
+    	<version>${jersey.version}</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.glassfish.jersey.ext</groupId>
+		<artifactId>jersey-spring3</artifactId>
+		<version>${jersey.version}</version>
+		<exclusions>
+			<exclusion>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+			</exclusion>			
+			<exclusion>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+			</exclusion>
+			<exclusion>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+			</exclusion>
+		</exclusions>			
+	</dependency>
+	
+	<dependency>
+  		<groupId>org.glassfish.jersey.media</groupId>
+  		<artifactId>jersey-media-json-jackson</artifactId>
+  		<scope>runtime</scope>
+  		<version>${jersey.version}</version>
+	</dependency>
+ 
+ 	<dependency>
+    	<groupId>org.glassfish.jersey.ext</groupId>
+    	<artifactId>jersey-bean-validation</artifactId>
+    	<version>${jersey.version}</version>
+	</dependency>
+	
+	<dependency>
+    	<groupId>com.google.api-client</groupId>
+     	<artifactId>google-api-client</artifactId>
+     	<version>1.20.0</version>
+   	</dependency>
+	<dependency>
+  		<groupId>com.google.api-client</groupId>
+  		<artifactId>google-api-client-servlet</artifactId>
+  		<version>1.20.0</version>
+	</dependency>
+	<dependency>
+  		<groupId>com.google.api-client</groupId>
+  		<artifactId>google-api-client-appengine</artifactId>
+  		<version>1.20.0</version>
+	</dependency>
+	<dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.3</version>
+	</dependency>
+  </dependencies>
+</project>
