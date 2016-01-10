@@ -1,5 +1,5 @@
 define(['angular'], function(angular) {
-	var app = angular.module('board', []);
+	var app = angular.module('board', ['user']);
 
 	app.controller('BoardController', [ '$http', '$scope', '$q', '$timeout',
 			function($http, $scope, $q, $timeout) {

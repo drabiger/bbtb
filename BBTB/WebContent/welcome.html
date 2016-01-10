@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BBTB: Welcome!</title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="css/standard.css" />
+</head>
+
+<script type="text/javascript" data-main="js/welcome.js"
+	src="js/lib/require.js"></script>
+
+<body>
+	<div class="container" ng-controller="UserController as user">
+		<div ng-include="'nav-top.html'"></div>
+		<div ng-hide="user.loggedIn" class="row">
+			<p>{{user.authStatusMessage}}</p>
+		</div>
+		<div class="page-header">
+			<h1>Welcome to Blood Bowl Tactic Board!</h1>
+		</div>
+		<div class="row">
+			<div class="col-md-8">
+				<div class="row">PLACEHOLDER IMAGE</div>
+				<div class="row" ng-show="user.triedAuthentication && !user.isAuthenticated">For using BBTB, you will need to use an
+					account. If you already have one, you can login using the button on
+					the top of this page. Or, you can create an account.</div>
+				<div class="row" ng-show="user.triedAuthentication && !user.isAuthenticated">
+					<a href="createUser.html" class="btn btn-lg btn-link">Yes,
+						let's create an account!</a>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<span class="label label-info">Info</span> What's is This Site
+						About?
+					</div>
+					<div class="panel-body">
+						<p>
+							<abbr title="Blood Bowl Tactic Board">BBTB</abbr> addresses
+							advanced <a href="https://en.wikipedia.org/wiki/Blood_Bowl">Blood
+								Bowl</a> players who would like to plan their board placements ahead
+							of actual matches.
+						</p>
+						<p>BBTB will allow you to create your own tactic boards, i.e.
+							you can place your and your oppontent's players on the field's
+							grid.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>

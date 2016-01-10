@@ -19,12 +19,13 @@
 			ng-controller="UserCreateFormController as userCreationForm">
 			<div class="page-header">
 				<h1>
-					Blood Bowl Tactics Board<br> <small>Create User
+					Blood Bowl Tactic Board<br> <small>Create User
 						Account</small>
 				</h1>
 			</div>
+			<div ng-show="false" class="row"><b>User auth?</b> {{user.isAuthenticated}} <b>User Auth Tried?</b> {{user.triedAuthentication}} <b>Google User?</b> {{user.googleAuthOK}} <b>Google Email</b> {{user.googleEmail}}</div>
 			<div class="row">
-				<div class="col-md-8 col-md-offset 4">
+				<div class="col-md-8">
 					<div ng-hide="isAuthenticated">
 						<div ng-show="user.googleAuthOK">
 							<div ng-show="user.isAuthenticated">BBTB Authentication

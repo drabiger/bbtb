@@ -27,12 +27,12 @@ define('gapi', ['https://apis.google.com/js/client.js'],
 	);
 
 // Start the main app logic.
-require(['jquery', 'bootstrap', 'angular', 'bbtb/boardController', 'bbtb/userController'],
-function   ($, bootstrap, angular, boardController, userController) {
+require(['jquery', 'bootstrap', 'angular', 'bbtb/bbtb', 'bbtb/userController'],
+function   ($, bootstrap, angular, bbtb, userController) {
     //jQuery, bootstrap and angular are all
     //loaded and can be used here now.
 	angular.element().ready(function() {
 		// bootstrap the app manually
-		angular.bootstrap(document, ['board']);
+		angular.bootstrap(document, ['bbtb']);
 	});
 });

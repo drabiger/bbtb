@@ -51,7 +51,7 @@ define(['angular', 'bbtb/login'], function(angular, login) {
 			  var id_token = googleUser.getAuthResponse().id_token;
 			  if(id_token) {
 				  thiz.googleAuthOK = true;
-				  thiz.googleEmail = googleUser.getBasicProfile().po;
+				  thiz.googleEmail = googleUser.getBasicProfile().getEmail();
 				  thiz.authStatusMessage += "Google login granted.";
 				  thiz.scope.$apply(); // update angularJS view
 				  var xhr = new XMLHttpRequest();
