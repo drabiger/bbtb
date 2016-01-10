@@ -86,8 +86,6 @@ define(['angular', 'bbtb/login'], function(angular, login) {
 						    	thiz.authStatusMessage += " Unexpected error.";
 						    	console.log("Got an 200 but still no user?. status = " + status);
 						    });
-						  
-						  thiz.loggedIn = true;
 					  } else {
 						  thiz.triedAuthentication = true;
 						  thiz.isAuthenticated = false;
