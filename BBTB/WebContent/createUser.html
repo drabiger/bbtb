@@ -19,11 +19,14 @@
 			ng-controller="UserCreateFormController as userCreationForm">
 			<div class="page-header">
 				<h1>
-					Blood Bowl Tactic Board<br> <small>Create User
-						Account</small>
+					Blood Bowl Tactic Board<br> <small>Create User Account</small>
 				</h1>
 			</div>
-			<div ng-show="false" class="row"><b>User auth?</b> {{user.isAuthenticated}} <b>User Auth Tried?</b> {{user.triedAuthentication}} <b>Google User?</b> {{user.googleAuthOK}} <b>Google Email</b> {{user.googleEmail}}</div>
+			<div ng-show="false" class="row">
+				<b>User auth?</b> {{user.isAuthenticated}} <b>User Auth Tried?</b>
+				{{user.triedAuthentication}} <b>Google User?</b>
+				{{user.googleAuthOK}} <b>Google Email</b> {{user.googleEmail}}
+			</div>
 			<div class="row">
 				<div class="col-md-8">
 					<div ng-hide="isAuthenticated">
@@ -46,34 +49,52 @@
 											will store your Google account name. This information will
 											not be available to other users.</span>
 									</div>
-									<div class="form-group" ng-class="{'has-error': form.displayName.$error.minlength || form.displayName.$error.maxlength}">
+									<div class="form-group"
+										ng-class="{'has-error': form.displayName.$error.minlength || form.displayName.$error.maxlength}">
 										<label for="displayName" class="col-md-4 control-label">Display
 											Name</label>
 										<div class="col-md-8">
 											<input type="text" class="form-control" id="displayName"
 												placeholder="e.g., Jim Johnson" name="displayName"
-												aria-describedby="helpDisplayName" ng-model="userCreationForm.displayName" ng-minlength="3" ng-maxlength="15" ng-required="true">
+												aria-describedby="helpDisplayName"
+												ng-model="userCreationForm.displayName" ng-minlength="3"
+												ng-maxlength="15" ng-required="true">
 										</div>
 										<div class="col-md-4"></div>
-										<span id="helpDisplayName" ng-hide="form.displayName.$error.minlength || form.displayName.$error.maxlength" class="col-md-8 help-block">This
-											will be the name under which you will be known to other BBTB
-											users.</span>
-										<span class="col-md-8 help-block" ng-show="form.displayName.$error.minlength">You need to enter at least three characters.</span>
-										<span class="col-md-8 help-block" ng-show="form.displayName.$error.maxlength">You cannot use more than 15 characters.</span>
+										<span id="helpDisplayName"
+											ng-hide="form.displayName.$error.minlength || form.displayName.$error.maxlength"
+											class="col-md-8 help-block">This will be the name
+											under which you will be known to other BBTB users.</span> <span
+											class="col-md-8 help-block"
+											ng-show="form.displayName.$error.minlength">You need
+											to enter at least three characters.</span> <span
+											class="col-md-8 help-block"
+											ng-show="form.displayName.$error.maxlength">You cannot
+											use more than 15 characters.</span>
 									</div>
 									<div class="form-group">
-										<label for="g-recaptcha" class="col-md-4 control-label">Please Click the Box</label>
+										<label for="g-recaptcha" class="col-md-4 control-label">Please
+											Click the Box</label>
 										<div class="col-md-8">
-											<div class="g-recaptcha" id="g-recaptcha" data-callback="captchaCallback" data-sitekey="6Ldk_BMTAAAAAKvUZOGGMYGhguLdMfRxC0iYHdxb"></div>
+											<div class="g-recaptcha" id="g-recaptcha"
+												data-callback="captchaCallback"
+												data-sitekey="6Ldk_BMTAAAAAKvUZOGGMYGhguLdMfRxC0iYHdxb"></div>
 										</div>
 										<div class="col-md-4"></div>
-										<span class="col-md-8 help-block">This is a test to prevent robots creating user accounts.</span>
+										<span class="col-md-8 help-block">This is a test to
+											prevent robots creating user accounts.</span>
 									</div>
 									<div class="form-group">
 										<div class="col-md-4"></div>
 										<div class="col-md-8">
-											<div id="recaptcha-state" style="display:none" recaptcha-success="false"></div>
-											<button ng-disabled="!form.displayName.$valid || !userCreationForm.recaptchaVerified" id="submitButton" type="submit" class="btn btn-primary btn-lg btn-block" ng-click="userCreationForm.createAccount(user)">Create User Account</button>
+											<div id="recaptcha-state" style="display: none"
+												recaptcha-success="false"></div>
+											<button
+												ng-disabled="!form.displayName.$valid || !userCreationForm.recaptchaVerified"
+												id="submitButton" type="submit"
+												class="btn btn-primary btn-lg btn-block"
+												ng-click="userCreationForm.createAccount(user)">Create
+												User Account</button>
 										</div>
 									</div>
 								</form>
@@ -97,17 +118,15 @@
 						</div>
 						<div class="panel-body">
 							<p>
-								The basic idea is that BBTB stores only a <em>minimum of
-									your personal data</em>. The data you create in BBTB will be
-								protected.
+								BBTB will store only a <em>minimum of your personal data</em>.
 							</p>
 							<p>When creating a BBTB user account, BBTB will ask for
 								permission to access basic profile information from your Google
 								account. Note that only your email address will be stored. BBTB
-								will not use your real name from Google. Instead, you will be
-								asked for a display name that will appear next to content that
-								you would like to be visible to other BBTB users.</p>
-						</div>
+								will not make use of your real name from Google. Instead, you
+								will be asked for a display name.</p>
+							<p>In case you decide to publish content to other BBTB users
+								this display name will appear as the owner of that content.</p></div>
 					</div>
 				</div>
 			</div>
