@@ -73,7 +73,7 @@
 										<div class="col-md-4"></div>
 										<div class="col-md-8">
 											<div id="recaptcha-state" style="display:none" recaptcha-success="false"></div>
-											<button ng-disabled="!form.displayName.$valid || $('#recaptcha-state').attr('recaptcha-success')=='false'" id="submitButton" type="submit" class="btn btn-primary btn-lg btn-block" ng-click="userCreationForm.createAccount(user)">Create User Account</button>
+											<button ng-disabled="!form.displayName.$valid || !userCreationForm.recaptchaVerified" id="submitButton" type="submit" class="btn btn-primary btn-lg btn-block" ng-click="userCreationForm.createAccount(user)">Create User Account</button>
 										</div>
 									</div>
 								</form>
