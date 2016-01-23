@@ -1,3 +1,7 @@
+* {
+	font-family: 'Noticia Text', serif;
+}
+
 .glyphicon:hover, .glyphicon:focus {
 	color: #ff8080;
 }

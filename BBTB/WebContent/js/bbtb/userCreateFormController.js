@@ -18,9 +18,16 @@ define(['angular'], function(angular) {
 		}
 	 };
 	 
+	 this.creationDisabled = function() {
+		 if(!$('#displayName').hasClass('ng-valid') || !grecaptcha.getResponse() || grecaptcha.getResponse().length === 0)
+			 return true;
+		 else
+			 return false;
+	 };
+	 
   }]);
 });
 
 function captchaCallback() {
-	$("#submitButton").removeAttr("disabled");
+	$("#recaptcha-state").attr("recaptcha-success", "true");
 };

@@ -52,7 +52,7 @@
 										<div class="col-md-8">
 											<input type="text" class="form-control" id="displayName"
 												placeholder="e.g., Jim Johnson" name="displayName"
-												aria-describedby="helpDisplayName" ng-model="userCreationForm.displayName" ng-minlength="3" ng-maxlength="15" required>
+												aria-describedby="helpDisplayName" ng-model="userCreationForm.displayName" ng-minlength="3" ng-maxlength="15" ng-required="true">
 										</div>
 										<div class="col-md-4"></div>
 										<span id="helpDisplayName" ng-hide="form.displayName.$error.minlength || form.displayName.$error.maxlength" class="col-md-8 help-block">This
@@ -72,7 +72,8 @@
 									<div class="form-group">
 										<div class="col-md-4"></div>
 										<div class="col-md-8">
-											<button disabled id="submitButton" type="submit" class="btn btn-primary btn-lg btn-block" ng-click="userCreationForm.createAccount(user)">Create User Account</button>
+											<div id="recaptcha-state" style="display:none" recaptcha-success="false"></div>
+											<button ng-disabled="!form.displayName.$valid || $('#recaptcha-state').attr('recaptcha-success')=='false'" id="submitButton" type="submit" class="btn btn-primary btn-lg btn-block" ng-click="userCreationForm.createAccount(user)">Create User Account</button>
 										</div>
 									</div>
 								</form>
