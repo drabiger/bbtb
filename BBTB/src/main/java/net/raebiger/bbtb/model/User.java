@@ -50,4 +50,9 @@ public class User extends AbstractEntityWithUUID {
 	public List<Board> getCreatedBoards() {
 		return createdBoards;
 	}
+
+	@Override
+	public String toString() {
+		return getDisplayName();
+	}
 }

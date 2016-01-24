@@ -26,6 +26,7 @@ public class UserDomain extends AbstractDomain<User> {
 	public UserDomain(User model) {
 		super(model);
 		email = model.getEmail();
+		displayName = model.getName();
 		createdBoards = new ArrayList<BoardDomainLink>();
 		for (Board b : model.getCreatedBoards()) {
 			createdBoards.add(new BoardDomainLink(b));

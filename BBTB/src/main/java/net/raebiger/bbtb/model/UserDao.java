@@ -57,6 +57,18 @@ public class UserDao {
 		}
 	}
 
+	public User findByDisplayNameOrNull(String displayName) {
+		TypedQuery<User> query = entityManager.createQuery("SELECT u FROM BBTBUser u WHERE u.name = :displayName",
+				User.class);
+		query.setParameter("displayName", displayName);
+		int size = query.getResultList().size();
+		if (size == 0) {
+			return null;
+		} else {
+			return query.getSingleResult();
+		}
+	}
+
 	public void delete(User user) {
 		entityManager.remove(user);
 	}

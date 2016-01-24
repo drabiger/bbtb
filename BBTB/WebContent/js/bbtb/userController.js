@@ -96,7 +96,7 @@ define(['angular', 'bbtb/login'], function(angular, login) {
 				  };
 				  xhr.send(id_token);
 			  }
-			  
+
 		  } else {
 			  thiz.authStatusMessage += " No grant from Google.";
 			  console.log('no google user logged in');
@@ -116,8 +116,19 @@ define(['angular', 'bbtb/login'], function(angular, login) {
 			  console.log('post user success. location=', headers('Location'));
 		  }).
 		  error(function(data, status, headers, config) {
-			  console.log('error posting user');
+			  console.log('error posting user. reponse: ' + data);
 		  });	
+	 };
+	 
+	 this.logout = function() {
+		console.log("logout");
+		$http.logout('/bbtb/logout').
+		 success(function(data, status, headers, config) {
+			  console.log('post user logout. location=', headers('Location'));
+		  }).
+		  error(function(data, status, headers, config) {
+			  console.log('error logout user. reponse: ' + data);
+		  });
 	 };
 
 	 this.setDisplayName = function(newValue) {
@@ -125,8 +136,8 @@ define(['angular', 'bbtb/login'], function(angular, login) {
 	 };
 	 
 	 this.getDisplayName = function() {
-		if(thiz.user && thiz.user.email) {
-			return thiz.user.email;
+		if(thiz.user && thiz.user.displayName) {
+			return thiz.user.displayName;
 		} else {
 			return "undefined";
 		}

@@ -75,7 +75,7 @@ public class UserResource {
 	public Response createUserAccount(UserDomain userInput) {
 
 		UserUpdater updater = new UserUpdater(userInput, userDao);
-		LOG.log(Level.INFO, "Created user {0}.", userInput.getEmail());
+		LOG.log(Level.INFO, "Creating user {0}.", userInput.getEmail());
 		return updater.create();
 	}
 

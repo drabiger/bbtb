@@ -27,8 +27,8 @@ define('gapi', ['https://apis.google.com/js/client.js'],
 	);
 
 // Start the main app logic.
-require(['jquery', 'bootstrap', 'angular', 'bbtb/userController', 'bbtb/userCreateFormController'],
-function   ($, bootstrap, angular, userController, userCreateFormController) {
+require(['jquery', 'bootstrap', 'angular', 'bbtb/login', 'bbtb/userController', 'bbtb/userCreateFormController'],
+function   ($, bootstrap, angular, gapi, userController, userCreateFormController) {
     //jQuery, bootstrap and angular are all
     //loaded and can be used here now.
 	angular.element().ready(function() {
