@@ -61,10 +61,27 @@
 								<div class="col-sm-8" ng-show="boardNameClicked">
 									<form>
 										<input show-focus="boardNameClicked"
-											ng-blur="controller.saveBoardModelName(); boardNameClicked=false;"
+											ng-blur="controller.saveBoardModel(); boardNameClicked=false;"
 											ng-model="controller.boardModelName"
 											ng-model-options="{ getterSetter: true }" />
 									</form>
+								</div>
+							</div>
+							<div class="row panel-body">
+								<div class="col-sm-4" ng-init="boardDescriptionClicked = false;">Description</div>
+								<div class="col-sm-8" ng-hide="boardDescriptionClicked"
+									ng-click="boardDescriptionClicked = true">
+									<a href="#">{{controller.boardModelDescription()}} <i
+										class="glyphicon glyphicon-pencil"></i></a>
+								</div>
+								<div class="col-sm-8" ng-show="boardDescriptionClicked">
+									<div class="form-group">
+										<textarea class="form-control" row="5"
+											show-focus="boardDescriptionClicked"
+											ng-blur="controller.saveBoardModel(); boardDescriptionClicked=false"
+											ng-model="controller.boardModelDescription"
+											ng-model-options="{ getterSetter: true }"></textarea>
+									</div>
 								</div>
 							</div>
 						</div>

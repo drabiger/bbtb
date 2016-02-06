@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Board extends AbstractEntityWithUUID {
+	@Column(name = "description")
+	private String description;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "RACE1_ID")
@@ -34,6 +36,14 @@ public class Board extends AbstractEntityWithUUID {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
 	private User creator;
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String value) {
+		description = value;
+	}
 
 	public Race getRace1() {
 		return race1;

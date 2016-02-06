@@ -49,7 +49,7 @@ define(['angular'], function(angular) {
 				
 				var uuid2positions = undefined;
 				
-				var boardModelNameDirty = false;
+				var boardModelDirty = false;
 				
 				// public
 				this.getBoard = function() {
@@ -428,10 +428,10 @@ define(['angular'], function(angular) {
 					$http.put('/bbtb/api/boards/' + thiz.boardModel.uuid, thiz.boardModel).
 					 then(function(response) {
 						  console.log('put success. location=', response.headers('Location'));
-						  thiz.boardModelNameDirty = false;
+						  thiz.boardModelDirty = false;
 					  },
 					  function(response) {
-						  console.log('error putting board');
+						  console.log('error putting board, response: ' + response);
 					  });
 				};
 				
@@ -460,11 +460,11 @@ define(['angular'], function(angular) {
 				// public
 				this.boardModelName = function(nameIfSetting) {
 					if(thiz.boardModel) {
-						if(nameIfSetting) {
+						if(typeof nameIfSetting !== 'undefined') {
 							var trimmedName = nameIfSetting.trim();
 							if(thiz.boardModel.name != trimmedName) {
 								thiz.boardModel.name = trimmedName;
-								thiz.boardModelNameDirty = true;
+								thiz.boardModelDirty = true;
 							};
 						} else {
 							return thiz.boardModel.name;
@@ -473,8 +473,25 @@ define(['angular'], function(angular) {
 				};
 				
 				// public
-				this.saveBoardModelName = function() {
-					if(thiz.boardModelNameDirty) {
+				this.boardModelDescription = function(nameIfSetting) {
+					if(thiz.boardModel) {
+						if(typeof nameIfSetting !== 'undefined') {
+							console.log("nameIfSetting="+nameIfSetting);
+							var trimmedDescription = nameIfSetting.trim();
+							if(thiz.boardModel.description != trimmedDescription) {
+								thiz.boardModel.description = trimmedDescription;
+								thiz.boardModelDirty = true;
+							};
+							console.log("modelDescription="+thiz.boardModel.description);
+						} else {
+							return thiz.boardModel.description;
+						};
+					};
+				};
+				
+				// public
+				this.saveBoardModel = function() {
+					if(thiz.boardModelDirty) {
 						thiz.persistBoardModel();
 					}
 				};

@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import net.raebiger.bbtb.model.Board;
 import net.raebiger.bbtb.model.BoardPlacement;
-import net.raebiger.bbtb.model.Race;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
@@ -17,9 +16,11 @@ public class BoardDomain extends AbstractDomain<Board> {
 
 	private String name;
 
-	private AbstractDomainLink<Race> race1;
+	private String description;
 
-	private AbstractDomainLink<Race> race2;
+	private RaceDomainLink race1;
+
+	private RaceDomainLink race2;
 
 	private String colorRace1;
 
@@ -35,6 +36,7 @@ public class BoardDomain extends AbstractDomain<Board> {
 	public BoardDomain(Board model) {
 		super(model);
 		setName(model.getName());
+		setDescription(model.getDescription());
 		setColorRace1(model.getColorRace1());
 		setColorRace2(model.getColorRace2());
 		if (model.getRace1() != null) {
@@ -63,19 +65,27 @@ public class BoardDomain extends AbstractDomain<Board> {
 		this.name = name;
 	}
 
-	public AbstractDomainLink<Race> getRace1() {
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String value) {
+		this.description = value;
+	}
+
+	public RaceDomainLink getRace1() {
 		return race1;
 	}
 
-	public void setRace1(AbstractDomainLink<Race> race1) {
+	public void setRace1(RaceDomainLink race1) {
 		this.race1 = race1;
 	}
 
-	public AbstractDomainLink<Race> getRace2() {
+	public RaceDomainLink getRace2() {
 		return race2;
 	}
 
-	public void setRace2(AbstractDomainLink<Race> race2) {
+	public void setRace2(RaceDomainLink race2) {
 		this.race2 = race2;
 	}
 

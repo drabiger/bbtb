@@ -42,6 +42,12 @@ public class BoardUpdater {
 			dirty = true;
 		}
 
+		String trimmedDescription = input.getDescription().trim();
+		if (trimmedDescription != null && !trimmedDescription.equals(existingBoard.getDescription())) {
+			existingBoard.setDescription(trimmedDescription);
+			dirty = true;
+		}
+
 		if (input.getRace1() != null && !input.getRace1().getUUID().equals(existingBoard.getRace1().getUUID())) {
 			Race newRace1 = raceDao.find(input.getRace1().getUUID());
 			if (newRace1 == null) {
