@@ -58,7 +58,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
 					JsonElement jelement = new JsonParser().parse(response.readEntity(String.class));
 					JsonObject jobject = jelement.getAsJsonObject();
 					boolean success = jobject.get("success").getAsBoolean();
-					LOG.info("Response: " + success);
+					LOG.info("Google recaptcha token verification response success: " + success);
 					if (success) {
 						authorized = true;
 					}

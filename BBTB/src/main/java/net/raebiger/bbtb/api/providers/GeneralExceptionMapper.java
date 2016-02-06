@@ -18,7 +18,7 @@ public class GeneralExceptionMapper implements ExceptionMapper<Throwable> {
 		if (exception instanceof WebApplicationException) {
 			return ((WebApplicationException) exception).getResponse();
 		} else {
-			LOG.log(Level.WARNING, "Error", exception);
+			LOG.log(Level.SEVERE, exception.getMessage(), exception);
 			return Response.serverError().entity("").build();
 		}
 	}
