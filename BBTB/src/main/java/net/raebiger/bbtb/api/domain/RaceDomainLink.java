@@ -3,6 +3,7 @@ package net.raebiger.bbtb.api.domain;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import net.raebiger.bbtb.model.Race;
 
@@ -19,6 +20,7 @@ public class RaceDomainLink extends AbstractDomainLink<Race> {
 	}
 
 	@Override
+	@XmlTransient
 	public String getApiResourceExtension() {
 		return "races";
 	}
