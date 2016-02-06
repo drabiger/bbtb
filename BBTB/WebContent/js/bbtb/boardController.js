@@ -90,15 +90,19 @@ define(['angular'], function(angular) {
 				
 				// private
 				this.initBoardModelIdx = function() {
+					// modelRow: 0..24
 					var modelRow = undefined;
 					
+					// row: 0...24
 					for (var row = 0; row < board.length; ++row) {
 						boardModelIdx[row] = new Array;
 						boardCells[row] = new Array(board[0].length);
 						boardCellStyle[row] = new Array(board[0].length);
 
+						// modelCol: 0...14
 						var modelCol = undefined;
 						
+						// col: 0...14
 						for (var col = 0; col < board[0].length; ++col) {
 							boardModelIdx[row][col] = new Array;
 
@@ -113,15 +117,16 @@ define(['angular'], function(angular) {
 								} else {
 									modelCol++;
 								}
-//								console.log("col="+col+", row="+row + " -> ("+modelRow + "," + modelCol+")");
-								boardModelIdx[row][col] = [modelRow, modelCol];
+								// console.log("col="+col+", row="+row + " -> ("+modelRow + "," + modelCol+")");
+								// modelRow = Y value on server, modelCol = X value on server
+								boardModelIdx[row][col] = [modelCol, modelRow];
 							}
 						}
 					}
 				};
 				
 				// public: (xx,yy) of board -> (x,y) of boardModel
-				this.getModelRowValue = function(row, col) {
+				this.getModelXValue = function(row, col) {
 					// console.log("getModel! xx="+boardModelIdx[x][y][0] + ", yy="+boardModelIdx[x][y][1]);
 					if(!boardModelIdx[row][col]) {
 //						console.log("undefined boardModelIdx for row=" + row + ", col="+ col);
@@ -133,7 +138,7 @@ define(['angular'], function(angular) {
 				};
 				
 				// public
-				this.getModelColValue = function(row, col) {
+				this.getModelYValue = function(row, col) {
 					// console.log("getModel! xx="+boardModelIdx[x][y][0] + ", yy="+boardModelIdx[x][y][1]);
 					if(!boardModelIdx[row][col]) {
 //						console.log("undefined boardModelIdx for row=" + row + ", col="+ col);
@@ -154,18 +159,17 @@ define(['angular'], function(angular) {
 				
 				// public
 				this.getBoardCells = function(row, col) {
-					var modelRow = thiz.getModelRowValue(row,col);
-					var modelCol = thiz.getModelColValue(row,col);
-					if (typeof modelRow !== 'undefined' && typeof modelCol !== 'undefined' && boardCells[modelRow][modelCol]) {
-//						console.log("getBoardCells, called for ("+modelRow+","+modelCol+"). ", boardCells[modelRow][modelCol]);
-						return boardCells[modelRow][modelCol].position.abbreviation;
+					var modelX = thiz.getModelXValue(row,col);
+					var modelY = thiz.getModelYValue(row,col);
+					if (typeof modelX !== 'undefined' && typeof modelY !== 'undefined' && boardCells[modelX][modelY]) {
+						return boardCells[modelX][modelY].position.abbreviation;
 					}
 				};
 				
 				// public: get placement with (x,y) of board coordinates which will be mapped to boardModel coordinates
 				this.getBoardPlacement = function(row, col) {
-					var modelRow = thiz.getModelRowValue(row,col);
-					var modelCol = thiz.getModelColValue(row,col);
+					var modelRow = thiz.getModelXValue(row,col);
+					var modelCol = thiz.getModelYValue(row,col);
 					if (typeof modelRow !== 'undefined' && typeof modelCol !== 'undefined' && boardCells[modelRow][modelCol]) {
 						return boardCells[modelRow][modelCol].uuid;
 					}
@@ -226,8 +230,8 @@ define(['angular'], function(angular) {
 				
 				// public
 				this.getBoardCellStyle = function(x, y) {
-					var modelX = thiz.getModelRowValue(x,y);
-					var modelY = thiz.getModelColValue(x,y);
+					var modelX = thiz.getModelXValue(x,y);
+					var modelY = thiz.getModelYValue(x,y);
 					if (typeof modelX !== 'undefined' && typeof modelY !== 'undefined') {
 						return boardCellStyle[modelX][modelY];
 					}

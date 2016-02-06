@@ -41,7 +41,7 @@ public class BoardPlacement extends AbstractEntityWithUUID {
 	}
 
 	public void setX(int x) {
-		if (x > 25 || x < 0) {
+		if (x > 14 || x < 0) {
 			throw new IndexOutOfBoundsException("x value must be >= 0, <= 14.");
 		}
 		this.x = x;
@@ -52,7 +52,7 @@ public class BoardPlacement extends AbstractEntityWithUUID {
 	}
 
 	public void setY(int y) {
-		if (y > 14 || y < 0) {
+		if (y > 25 || y < 0) {
 			throw new IndexOutOfBoundsException("y value must be >= 0, <= 25.");
 		}
 		this.y = y;

@@ -27,11 +27,11 @@
 								ng-init="rowIdx = $index;">
 								<td ng-repeat="col in row track by $index"
 									ng-init="colIdx = $index;"
-									title="({{controller.getModelRowValue(rowIdx,colIdx)}},{{controller.getModelColValue(rowIdx,colIdx)}})"
-									x-bbtb-board-x="{{controller.getModelRowValue(rowIdx,colIdx)}}"
-									x-bbtb-board-y="{{controller.getModelColValue(rowIdx,colIdx)}}"
+									title="({{controller.getModelXValue(rowIdx,colIdx)}},{{controller.getModelYValue(rowIdx,colIdx)}})"
+									x-bbtb-board-x="{{controller.getModelXValue(rowIdx,colIdx)}}"
+									x-bbtb-board-y="{{controller.getModelYValue(rowIdx,colIdx)}}"
 									ng-style="controller.getBoardCellStyle(rowIdx,colIdx)"
-									ng-attr-id="{{'bbtbCell_'+controller.getModelRowValue(rowIdx,colIdx)+'_'+controller.getModelColValue(rowIdx,colIdx)}}"
+									ng-attr-id="{{'bbtbCell_'+controller.getModelXValue(rowIdx,colIdx)+'_'+controller.getModelYValue(rowIdx,colIdx)}}"
 									x-bbtb-placement="{{controller.getBoardPlacement(rowIdx,colIdx)}}"
 									draggable="{{controller.getBoardPlacement(rowIdx,colIdx).length>0}}"
 									ng-class="{
