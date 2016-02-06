@@ -66,6 +66,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
 			} else {
 				String idTokenString = (String) webRequest.getSession().getAttribute("bbtbUserId");
 				if (idTokenString != null && userDao.findByEmailOrNull(idTokenString) != null) {
+					LOG.info("Request by user: " + idTokenString);
 					authorized = true;
 				}
 			}
