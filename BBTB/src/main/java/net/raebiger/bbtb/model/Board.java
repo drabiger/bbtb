@@ -13,7 +13,7 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Board extends AbstractEntityWithUUID {
-	@Column(name = "description")
+	@Column(name = "description", length = 256)
 	private String description;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -24,10 +24,10 @@ public class Board extends AbstractEntityWithUUID {
 	@JoinColumn(name = "RACE2_ID")
 	private Race race2;
 
-	@Column(name = "colorRace1")
+	@Column(name = "colorRace1", length = 16)
 	private String colorRace1;
 
-	@Column(name = "colorRace2")
+	@Column(name = "colorRace2", length = 16)
 	private String colorRace2;
 
 	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)

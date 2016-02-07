@@ -173,6 +173,9 @@ public class DatabaseInit {
 			Board board1 = new Board();
 			board1.setCreator(userFlash);
 			board1.setName("Aggressive Wood Elf Kickoff");
+			board1.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+					+ "Aliquam quis sollicitudin ante. Etiam sed accumsan nunc, ultricies efficitur tortor. "
+					+ "In hac habitasse platea dictumst. Nam tempus odio a nulla ultricies dictum.");
 			board1.setRace1(raceWoodElves);
 			board1.setRace2(raceHumans);
 			board1.addPlacement(5, 6, posWoodElvesLinemen);

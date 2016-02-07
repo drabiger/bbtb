@@ -15,7 +15,7 @@ public abstract class AbstractEntityWithUUID {
 	@Column(name = "uuid")
 	protected String uuid;
 
-	@Column(name = "name")
+	@Column(name = "name", length = 32)
 	protected String name;
 
 	@Id

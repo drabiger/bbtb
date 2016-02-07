@@ -10,10 +10,10 @@ import javax.persistence.OneToMany;
 
 @Entity(name = "BBTBUser")
 public class User extends AbstractEntityWithUUID {
-	@Column(name = "email")
+	@Column(name = "email", length = 128)
 	private String email;
 
-	@Column(name = "oauthtoken")
+	@Column(name = "oauthtoken", length = 256)
 	private String oauthtoken;
 
 	@OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, orphanRemoval = true)

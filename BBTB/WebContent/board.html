@@ -60,7 +60,7 @@
 								</div>
 								<div class="col-sm-8" ng-show="boardNameClicked">
 									<form>
-										<input show-focus="boardNameClicked"
+										<input show-focus="boardNameClicked" maxlength="32"
 											ng-blur="controller.saveBoardModel(); boardNameClicked=false;"
 											ng-model="controller.boardModelName"
 											ng-model-options="{ getterSetter: true }" />
@@ -76,7 +76,7 @@
 								</div>
 								<div class="col-sm-8" ng-show="boardDescriptionClicked">
 									<div class="form-group">
-										<textarea class="form-control" rows="5"
+										<textarea class="form-control" rows="5" maxlength="256"
 											show-focus="boardDescriptionClicked"
 											ng-blur="controller.saveBoardModel(); boardDescriptionClicked=false"
 											ng-model="controller.boardModelDescription"
