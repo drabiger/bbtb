@@ -14,6 +14,8 @@ import net.raebiger.bbtb.model.Position;
 import net.raebiger.bbtb.model.PositionDao;
 import net.raebiger.bbtb.model.Race;
 import net.raebiger.bbtb.model.RaceDao;
+import net.raebiger.bbtb.model.User;
+import net.raebiger.bbtb.model.UserDao;
 
 @Component
 @Transactional(propagation = Propagation.REQUIRED)
@@ -27,6 +29,9 @@ public class DatabaseInit {
 
 	@Autowired
 	BoardDao boardDao;
+
+	@Autowired
+	UserDao userDao;
 
 	private static final Logger LOG = Logger.getLogger("BBTB");
 
@@ -160,7 +165,13 @@ public class DatabaseInit {
 		}
 
 		{
+			User userFlash = new User();
+			userFlash.setEmail("drabiger@googlemail.com");
+			userFlash.setDisplayName("Flash");
+			userDao.persist(userFlash);
+
 			Board board1 = new Board();
+			board1.setCreator(userFlash);
 			board1.setName("Aggressive Wood Elf Kickoff");
 			board1.setRace1(raceWoodElves);
 			board1.setRace2(raceHumans);
@@ -170,6 +181,7 @@ public class DatabaseInit {
 			board1.setColorRace1("#A00000");
 			board1.setColorRace2("#0099FF");
 			boardDao.persist(board1);
+
 		}
 	}
 }

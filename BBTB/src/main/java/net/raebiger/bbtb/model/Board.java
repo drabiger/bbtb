@@ -37,6 +37,14 @@ public class Board extends AbstractEntityWithUUID {
 	@JoinColumn(name = "USER_ID")
 	private User creator;
 
+	public User getCreator() {
+		return creator;
+	}
+
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
+
 	public String getDescription() {
 		return description;
 	}
