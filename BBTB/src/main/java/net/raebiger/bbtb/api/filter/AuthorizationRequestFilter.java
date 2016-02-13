@@ -23,7 +23,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import net.raebiger.bbtb.model.User;
 import net.raebiger.bbtb.model.UserDao;
+import net.raebiger.bbtb.sessioninfo.SessionInfo;
 
 @Provider
 @Priority(Priorities.AUTHENTICATION)
@@ -33,6 +35,9 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
 
 	@Autowired
 	UserDao userDao;
+
+	@Autowired
+	SessionInfo sessionInfo;
 
 	private static final Logger LOG = Logger.getLogger("BBTB");
 
@@ -64,14 +69,24 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
 					}
 				}
 			} else {
-				String idTokenString = (String) webRequest.getSession().getAttribute("bbtbUserId");
-				if (idTokenString != null && userDao.findByEmailOrNull(idTokenString) != null) {
-					LOG.info("Request by user: " + idTokenString);
+				if (sessionInfo.getCurrentUser() != null) {
 					authorized = true;
+				} else {
+					// TODO do we need the following code? is it all managed by
+					// sessionInfo?
+					String idTokenString = (String) webRequest.getSession().getAttribute("bbtbUserId");
+					if (idTokenString != null && userDao.findByEmailOrNull(idTokenString) != null) {
+						User userOrNull = userDao.findByEmailOrNull(idTokenString);
+						if (userOrNull != null) {
+							LOG.info("Request by user: " + idTokenString);
+							authorized = true;
+							sessionInfo.setCurrentUser(userOrNull);
+						}
+					}
 				}
 			}
 
-			if (authorized != true) {
+			if (!authorized) {
 				requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
 						.entity("User cannot access the resource.").build());
 				LOG.warning("Unauthorized request attempt.");

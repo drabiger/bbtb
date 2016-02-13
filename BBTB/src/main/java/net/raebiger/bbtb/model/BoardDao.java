@@ -8,11 +8,11 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service("boardDao")
+@Repository("boardDao")
 @Transactional(propagation = Propagation.REQUIRED)
 public class BoardDao {
 

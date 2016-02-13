@@ -11,8 +11,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import net.raebiger.bbtb.permission.PermissionObject;
+
 @Entity
-public class Board extends AbstractEntityWithUUID {
+public class Board extends AbstractEntityWithUUID implements PermissionObject {
 	@Column(name = "description", length = 256)
 	private String description;
 

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -32,8 +32,9 @@ import com.google.gson.Gson;
 
 import net.raebiger.bbtb.model.User;
 import net.raebiger.bbtb.model.UserDao;
+import net.raebiger.bbtb.sessioninfo.SessionInfo;
 
-@Component
+@Service
 @Transactional
 public class GoogleAuthenticator extends HttpServlet {
 
@@ -45,6 +46,9 @@ public class GoogleAuthenticator extends HttpServlet {
 	static final String	APPS_DOMAIN_NAME	= "localhost";
 	// List the scopes your app requires:
 	static List<String>	SCOPE				= Arrays.asList("https://www.googleapis.com/auth/plus.me");
+
+	@Autowired
+	SessionInfo sessionInfo;
 
 	private static final Logger LOG = Logger.getLogger("BBTB");
 
@@ -109,6 +113,7 @@ public class GoogleAuthenticator extends HttpServlet {
 						} else {
 							// Case: Google verified user,
 							// user has BBBT account. (LOGIN SUCCESSFUL!)
+							sessionInfo.setCurrentUser(userOrNull);
 							LOG.log(Level.INFO, "Login: {0}", email);
 							request.getSession().setAttribute("bbtbUserId", userOrNull.getEmail());
 							response.setStatus(HttpServletResponse.SC_OK);
