@@ -55,4 +55,15 @@ public class User extends AbstractEntityWithUUID {
 	public String toString() {
 		return getDisplayName();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj != null && User.class.isAssignableFrom(obj.getClass())) {
+			User otherUser = (User) obj;
+			if (otherUser.getUUID().equals(getUUID())) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

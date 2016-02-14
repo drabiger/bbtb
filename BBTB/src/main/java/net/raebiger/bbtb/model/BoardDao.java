@@ -1,6 +1,7 @@
 package net.raebiger.bbtb.model;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
@@ -8,15 +9,25 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import net.raebiger.bbtb.permission.PermissionManager;
+import net.raebiger.bbtb.sessioninfo.SessionInfo;
 
 @Repository("boardDao")
 @Transactional(propagation = Propagation.REQUIRED)
 public class BoardDao {
 
 	private EntityManager entityManager;
+
+	@Autowired
+	private SessionInfo sessionInfo;
+
+	@Autowired
+	private PermissionManager permissionManager;
 
 	private static final Logger LOG = Logger.getLogger("BBTB");
 
@@ -35,14 +46,18 @@ public class BoardDao {
 
 	public List<Board> getAllBoards() {
 		LOG.entering(getClass().getName(), "getAllBoards");
-		TypedQuery<Board> query = entityManager.createQuery("SELECT b FROM Board b ORDER BY b.id", Board.class);
+		TypedQuery<Board> query = entityManager
+				.createQuery("SELECT b FROM Board b WHERE b.creator =:user ORDER BY b.id", Board.class);
+		query.setParameter("user", sessionInfo.getCurrentUser());
 		List<Board> resultList = query.getResultList();
 		return resultList;
 	}
 
 	public Board find(String uuid) {
-		TypedQuery<Board> query = entityManager.createQuery("SELECT b FROM Board b WHERE b.uuid = :uuid", Board.class);
+		TypedQuery<Board> query = entityManager
+				.createQuery("SELECT b FROM Board b WHERE b.uuid = :uuid AND b.creator =:user", Board.class);
 		query.setParameter("uuid", uuid);
+		query.setParameter("user", sessionInfo.getCurrentUser());
 		return query.getSingleResult();
 	}
 
@@ -65,7 +80,12 @@ public class BoardDao {
 	}
 
 	public void delete(Board board) {
-		entityManager.remove(board);
+		if (permissionManager.mayDelete(board)) {
+			entityManager.remove(board);
+		} else {
+			LOG.log(Level.SEVERE, "VIOLATION User '{0}' tried to delete board '{1}'!",
+					new Object[] { sessionInfo.getCurrentUser().getName(), board.getUUID() });
+		}
 	}
 
 }
