@@ -1,7 +1,34 @@
 define(['angular', 'bbtb/login'], function(angular, login) {
   var app = angular.module('user', []);
 
-  app.controller('UserController', ['$http', '$scope', function($http, $scope) {
+  app.service('authenticatedUser', function() {
+	  var authenticatedUser = null;
+	  
+	  var handlers = [];
+	  
+	  var service = this;
+	  
+	  service.getAuthenticatedUser = function() {
+		  return authenticatedUser; 
+	  };
+	  
+	  service.setAuthenticatedUser = function(user) {
+		  authenticatedUser = user;
+		  if(user !== null) {
+			  for(var i = 0; i < handlers.length; ++i) {
+				  if(typeof handlers[i] !== 'undefined') {
+					  handlers[i](authenticatedUser);
+				  }
+			  }
+		  }
+	  };
+	  
+	  service.registerHandler = function(handler) {
+		  handlers.push(handler);
+	  };
+  });
+  
+  app.controller('UserController', ['$http', '$scope', 'authenticatedUser', function($http, $scope, authenticatedUser) {
 	 var thiz = this;
 	 
 	 this.googleAuthOK = false;
@@ -29,12 +56,14 @@ define(['angular', 'bbtb/login'], function(angular, login) {
 		 		if(thiz.user && thiz.user != '') {
 		 			thiz.triedAuthentication = true;
 		 			thiz.isAuthenticated = true;
-		 		} 
+		 			authenticatedUser.setAuthenticatedUser(data);
+		 		}
 		    }).
 		    error(function(data, status, headers, config) {
 		    	thiz.user = null;
 	 			thiz.triedAuthentication = true;
 		    	thiz.isAuthenticated = false;
+		    	authenticatedUser.setAuthenticatedUser(null);
 		    	// log error
 		    	console.log("can't access user data. status = " + status);
 		    	thiz.authStatusMessage += " no active BBTB session. Trying Google login...";
@@ -71,9 +100,10 @@ define(['angular', 'bbtb/login'], function(angular, login) {
 						 		thiz.user = data;
 						 		console.log("Google login granted, BBTB user retrieved", data);
 						 		thiz.authStatusMessage += " BBTB user retrieved!";
-						 		if(user) {
+						 		if(thiz.user) {
 						 			thiz.triedAuthentication = true;
 						 			thiz.isAuthenticated = true;
+						 			authenticatedUser.setAuthenticatedUser(thiz.user);
 						 			thiz.scope.$apply(); // update angularJS view
 						 		} 
 						    }).
@@ -81,6 +111,7 @@ define(['angular', 'bbtb/login'], function(angular, login) {
 						    	thiz.user = null;
 						    	thiz.triedAuthentication = true;
 					 			thiz.isAuthenticated = false;
+					 			authenticatedUser.setAuthenticatedUser(null);
 					 			thiz.scope.$apply(); // update angularJS view
 						    	// log error
 						    	thiz.authStatusMessage += " Unexpected error.";
@@ -89,6 +120,7 @@ define(['angular', 'bbtb/login'], function(angular, login) {
 					  } else {
 						  thiz.triedAuthentication = true;
 						  thiz.isAuthenticated = false;
+						  authenticatedUser.setAuthenticatedUser(null);
 						  thiz.authStatusMessage += " But no BBTB account linked.";
 						  console.log("Google log granted but no BBTB account linked. status = " + status);
 						  // window.location.replace("createUser.html");

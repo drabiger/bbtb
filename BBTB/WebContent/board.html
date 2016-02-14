@@ -19,11 +19,11 @@
 			<div ng-hide="user.isAuthenticated" class="row">
 				<p>{{user.authStatusMessage}}</p>
 			</div>
-			<div ng-show="user.isAuthenticated" class="row">
+			<div ng-show="controller.initialized" class="row">
 				<div class="col-md-9">
 					<table id="TABLE" class="bbtb-board">
 						<tbody>
-							<tr ng-repeat="row in controller.getBoard()"
+							<tr ng-if="controller.initialized" ng-repeat="row in controller.getBoard()"
 								ng-init="rowIdx = $index;">
 								<td ng-repeat="col in row track by $index"
 									ng-init="colIdx = $index;"

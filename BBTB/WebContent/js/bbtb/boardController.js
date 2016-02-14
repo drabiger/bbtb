@@ -1,8 +1,8 @@
 define(['angular'], function(angular) {
 	var app = angular.module('board', ['user']);
 
-	app.controller('BoardController', [ '$http', '$scope', '$q', '$timeout',
-			function($http, $scope, $q, $timeout) {
+	app.controller('BoardController', [ '$http', '$scope', '$q', '$timeout', 'authenticatedUser',
+			function($http, $scope, $q, $timeout, authenticatedUser) {
 				var thiz = this;
 				
 				var board = [['o','o','o','o','|','o','o','o','o','o','o','o','|','o','o','o','o'],
@@ -51,9 +51,16 @@ define(['angular'], function(angular) {
 				
 				var boardModelDirty = false;
 				
+				var initialized = false;
+				
 				// public
 				this.getBoard = function() {
 					return board;
+				};
+				
+				this.userAuthenticatedCallback = function() {
+					this.initBoardModelIdx();
+					this.initBoardModel();
 				};
 				
 				// private
@@ -76,6 +83,7 @@ define(['angular'], function(angular) {
 					 			console.log("race1 ", thiz.race1Model);
 					 			console.log("race2 ", thiz.race2Model);
 					 			thiz.setBoardCellStyle();
+					 			thiz.initialized = true;
 					 			$timeout(function () {
 					 				thiz.initPlacements();
 					 			}, 0, false);
@@ -496,9 +504,14 @@ define(['angular'], function(angular) {
 					}
 				};
 				
-				this.initBoardModelIdx();
-				this.initBoardModel();
+				// callback for authenticatedUser service in user module
+				initializeBoard = function(user) {
+					thiz.initBoardModelIdx();
+					thiz.initBoardModel();
+				}
 				
+				authenticatedUser.registerHandler(initializeBoard);
+
 			} ]);
 
 	  app.directive('showFocus', function($timeout) {
