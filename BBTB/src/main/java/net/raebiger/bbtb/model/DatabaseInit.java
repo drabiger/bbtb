@@ -1,4 +1,4 @@
-package net.raebiger.bbtb.model.init;
+package net.raebiger.bbtb.model;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -7,15 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import net.raebiger.bbtb.model.Board;
-import net.raebiger.bbtb.model.BoardDao;
-import net.raebiger.bbtb.model.Position;
-import net.raebiger.bbtb.model.PositionDao;
-import net.raebiger.bbtb.model.Race;
-import net.raebiger.bbtb.model.RaceDao;
-import net.raebiger.bbtb.model.User;
-import net.raebiger.bbtb.model.UserDao;
 
 @Component
 @Transactional(propagation = Propagation.REQUIRED)

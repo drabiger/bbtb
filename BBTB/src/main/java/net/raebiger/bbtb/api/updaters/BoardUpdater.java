@@ -1,36 +1,32 @@
 package net.raebiger.bbtb.api.updaters;
 
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import javax.ws.rs.core.Response;
 
 import net.raebiger.bbtb.api.domain.BoardDomain;
-import net.raebiger.bbtb.api.domain.BoardPlacementDomain;
+import net.raebiger.bbtb.model.AccessController;
 import net.raebiger.bbtb.model.Board;
-import net.raebiger.bbtb.model.BoardDao;
-import net.raebiger.bbtb.model.BoardPlacement;
 import net.raebiger.bbtb.model.Race;
 import net.raebiger.bbtb.model.RaceDao;
 
 public class BoardUpdater {
-	private BoardDomain	input;
-	private BoardDao	boardDao;
+	private BoardDomain input;
 
-	private static final Logger	LOG	= Logger.getLogger("BBTB");
-	private RaceDao				raceDao;
+	private static final Logger		LOG	= Logger.getLogger("BBTB");
+	private RaceDao					raceDao;
+	private AccessController<Board>	boardAccManager;
 
-	public BoardUpdater(BoardDomain input, BoardDao boardDao, RaceDao raceDao) {
+	public BoardUpdater(BoardDomain input, AccessController<Board> boardAccManager, RaceDao raceDao) {
 		this.input = input;
-		this.boardDao = boardDao;
+		this.boardAccManager = boardAccManager;
 		this.raceDao = raceDao;
 	}
 
 	public Response update() {
 
-		Board existingBoard = boardDao.find(input.getUUID());
+		Board existingBoard = boardAccManager.getByUuid(input.getUUID());
 		if (existingBoard == null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("There is no board for given uuid.").build();
 		}
@@ -80,23 +76,28 @@ public class BoardUpdater {
 			dirty = true;
 		}
 
-		Map<String, BoardPlacementDomain> uuidsOfInputPlacements = input.getPlacements().stream()
-				.collect(Collectors.toMap(p -> p.getUUID(), p -> p));
+		// Map<String, BoardPlacementDomain> uuidsOfInputPlacements =
+		// input.getPlacements().stream()
+		// .collect(Collectors.toMap(p -> p.getUUID(), p -> p));
 
-		Map<String, BoardPlacement> uuidsOfExistingPlacements = existingBoard.getPlacements().stream()
-				.collect(Collectors.toMap(p -> p.getUUID(), p -> p));
-
-		Map<String, BoardPlacement> uuidsOfRemovedPlacements = existingBoard.getPlacements().stream()
-				.filter(p -> !uuidsOfInputPlacements.containsKey(p.getUUID()))
-				.collect(Collectors.toMap(p -> p.getUUID(), p -> p));
-
-		Map<String, BoardPlacementDomain> uuidsOfAddedPlacements = input.getPlacements().stream()
-				.filter(p -> !uuidsOfInputPlacements.containsKey(p.getUUID()))
-				.collect(Collectors.toMap(p -> p.getUUID(), p -> p));
-
-		Map<String, BoardPlacementDomain> uuidsOfProbablyModifiedPlacements = input.getPlacements().stream()
-				.filter(p -> uuidsOfInputPlacements.containsKey(p.getUUID()))
-				.collect(Collectors.toMap(p -> p.getUUID(), p -> p));
+		// Map<String, BoardPlacement> uuidsOfExistingPlacements =
+		// existingBoard.getPlacements().stream()
+		// .collect(Collectors.toMap(p -> p.getUUID(), p -> p));
+		//
+		// Map<String, BoardPlacement> uuidsOfRemovedPlacements =
+		// existingBoard.getPlacements().stream()
+		// .filter(p -> !uuidsOfInputPlacements.containsKey(p.getUUID()))
+		// .collect(Collectors.toMap(p -> p.getUUID(), p -> p));
+		//
+		// Map<String, BoardPlacementDomain> uuidsOfAddedPlacements =
+		// input.getPlacements().stream()
+		// .filter(p -> !uuidsOfInputPlacements.containsKey(p.getUUID()))
+		// .collect(Collectors.toMap(p -> p.getUUID(), p -> p));
+		//
+		// Map<String, BoardPlacementDomain> uuidsOfProbablyModifiedPlacements =
+		// input.getPlacements().stream()
+		// .filter(p -> uuidsOfInputPlacements.containsKey(p.getUUID()))
+		// .collect(Collectors.toMap(p -> p.getUUID(), p -> p));
 
 		// TODO this was never finished
 
@@ -113,7 +114,7 @@ public class BoardUpdater {
 		// }
 
 		if (dirty) {
-			boardDao.persist(existingBoard);
+			boardAccManager.persist(existingBoard);
 		}
 
 		Response response = Response.ok().build();

@@ -59,7 +59,7 @@
 		<property name="password" value="${jdbc.password}" />
 	</bean>
 	
-	<bean id="databaseInit" class="net.raebiger.bbtb.model.init.DatabaseInit" init-method="initialize">
+	<bean id="databaseInit" class="net.raebiger.bbtb.model.DatabaseInit" init-method="initialize">
 		<!-- <property name="dataSource" ref="dataSource" /> -->
 	</bean>
 </beans>

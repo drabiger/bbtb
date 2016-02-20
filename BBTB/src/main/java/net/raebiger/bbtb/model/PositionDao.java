@@ -47,8 +47,8 @@ public class PositionDao {
 		return query.getSingleResult();
 	}
 
-	public void delete(Position race) {
-		entityManager.remove(race);
+	public void delete(Position position) {
+		entityManager.remove(position);
 	}
 
 }

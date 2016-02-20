@@ -8,8 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import net.raebiger.bbtb.permission.PermissionObject;
+
 @MappedSuperclass
-public abstract class AbstractEntityWithUUID {
+public abstract class AbstractEntityWithUUID implements PermissionObject {
 	// TODO uuid needs to be secured before handing over to clients
 
 	@Column(name = "uuid")

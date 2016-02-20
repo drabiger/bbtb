@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -27,9 +28,9 @@ import net.raebiger.bbtb.api.domain.BoardDomain;
 import net.raebiger.bbtb.api.domain.BoardPlacementDomain;
 import net.raebiger.bbtb.api.updaters.BoardPlacementUpdater;
 import net.raebiger.bbtb.api.updaters.BoardUpdater;
+import net.raebiger.bbtb.model.AccessController;
 import net.raebiger.bbtb.model.Board;
-import net.raebiger.bbtb.model.BoardDao;
-import net.raebiger.bbtb.model.PositionDao;
+import net.raebiger.bbtb.model.Position;
 import net.raebiger.bbtb.model.RaceDao;
 
 @Path("boards")
@@ -42,11 +43,11 @@ public class BoardResource {
 	@Context
 	private UriInfo uriInfo;
 
-	@Autowired
-	BoardDao boardDao;
+	@Resource
+	AccessController<Board> boardAccessController;
 
-	@Autowired
-	PositionDao positionDao;
+	@Resource
+	AccessController<Position> positionController;
 
 	@Autowired
 	RaceDao raceDao;
@@ -56,7 +57,7 @@ public class BoardResource {
 	@GET
 	@Path("{uuid}")
 	public BoardDomain getSingleBoard(@PathParam("uuid") @NotNull String uuid) {
-		Board board = boardDao.find(uuid);
+		Board board = boardAccessController.getByUuid(uuid);
 		BoardDomain boardDomain = new BoardDomain(board);
 		return boardDomain;
 	}
@@ -69,7 +70,7 @@ public class BoardResource {
 		// https://docs.angularjs.org/api/ng/service/$http
 		LOG.log(Level.INFO, "getAll");
 		List<BoardDomain> boardDomains = new ArrayList<BoardDomain>();
-		List<Board> allBoards = boardDao.getAllBoards();
+		List<Board> allBoards = boardAccessController.getAll();
 
 		for (Board board : allBoards) {
 			BoardDomain boardDomain = new BoardDomain(board);
@@ -91,11 +92,11 @@ public class BoardResource {
 	public Response deleteBoard(@PathParam("uuid") @NotNull String uuid) {
 		// TODO enable XSRF protection by sending X-XSRF-TOKENs, see
 		// https://docs.angularjs.org/api/ng/service/$http
-		Board boardToDelete = boardDao.find(uuid);
+		Board boardToDelete = boardAccessController.getByUuid(uuid);
 		if (boardToDelete == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("UUID does not exist").build();
 		}
-		boardDao.delete(boardToDelete);
+		boardAccessController.delete(boardToDelete);
 		return Response.status(Response.Status.NO_CONTENT).build();
 	}
 
@@ -106,8 +107,8 @@ public class BoardResource {
 		// TODO enable XSRF protection by sending X-XSRF-TOKENs, see
 		// https://docs.angularjs.org/api/ng/service/$http
 
-		BoardPlacementUpdater updater = new BoardPlacementUpdater(placementUUID, placementDomain, boardUUID, boardDao,
-				positionDao);
+		BoardPlacementUpdater updater = new BoardPlacementUpdater(placementUUID, placementDomain, boardUUID,
+				boardAccessController, positionController);
 		return updater.update();
 
 	}
@@ -119,8 +120,8 @@ public class BoardResource {
 		// TODO enable XSRF protection by sending X-XSRF-TOKENs, see
 		// https://docs.angularjs.org/api/ng/service/$http
 
-		BoardPlacementUpdater updater = new BoardPlacementUpdater(null, placementDomain, boardUUID, boardDao,
-				positionDao);
+		BoardPlacementUpdater updater = new BoardPlacementUpdater(null, placementDomain, boardUUID,
+				boardAccessController, positionController);
 		return updater.update();
 
 	}
@@ -132,8 +133,8 @@ public class BoardResource {
 		// TODO enable XSRF protection by sending X-XSRF-TOKENs, see
 		// https://docs.angularjs.org/api/ng/service/$http
 
-		BoardPlacementUpdater updater = new BoardPlacementUpdater(placementUUID, placementDomain, boardUUID, boardDao,
-				positionDao);
+		BoardPlacementUpdater updater = new BoardPlacementUpdater(placementUUID, placementDomain, boardUUID,
+				boardAccessController, positionController);
 		return updater.delete();
 
 	}
@@ -147,7 +148,7 @@ public class BoardResource {
 			return Response.status(Response.Status.BAD_REQUEST).entity("UUIDs do not match").build();
 		}
 
-		BoardUpdater updater = new BoardUpdater(board, boardDao, raceDao);
+		BoardUpdater updater = new BoardUpdater(board, boardAccessController, raceDao);
 		return updater.update();
 	}
 

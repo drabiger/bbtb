@@ -1,7 +1,6 @@
 package net.raebiger.bbtb.model;
 
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
@@ -14,20 +13,16 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import net.raebiger.bbtb.permission.PermissionManager;
 import net.raebiger.bbtb.sessioninfo.SessionInfo;
 
 @Repository("boardDao")
 @Transactional(propagation = Propagation.REQUIRED)
-public class BoardDao {
+class BoardDao {
 
 	private EntityManager entityManager;
 
 	@Autowired
 	private SessionInfo sessionInfo;
-
-	@Autowired
-	private PermissionManager permissionManager;
 
 	private static final Logger LOG = Logger.getLogger("BBTB");
 
@@ -80,12 +75,7 @@ public class BoardDao {
 	}
 
 	public void delete(Board board) {
-		if (permissionManager.mayDelete(board)) {
-			entityManager.remove(board);
-		} else {
-			LOG.log(Level.SEVERE, "VIOLATION User '{0}' tried to delete board '{1}'!",
-					new Object[] { sessionInfo.getCurrentUser().getName(), board.getUUID() });
-		}
+		entityManager.remove(board);
 	}
 
 }
