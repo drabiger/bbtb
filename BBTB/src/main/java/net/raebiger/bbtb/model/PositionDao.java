@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service("positionDao")
 @Transactional(propagation = Propagation.REQUIRED)
-public class PositionDao {
+class PositionDao {
 
 	private EntityManager entityManager;
 

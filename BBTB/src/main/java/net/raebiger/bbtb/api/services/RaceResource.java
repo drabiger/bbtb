@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.raebiger.bbtb.api.domain.RaceDomain;
 import net.raebiger.bbtb.api.updaters.RaceUpdater;
-import net.raebiger.bbtb.model.PositionDao;
 import net.raebiger.bbtb.model.Race;
 import net.raebiger.bbtb.model.RaceDao;
 
@@ -41,9 +40,6 @@ public class RaceResource {
 
 	@Autowired
 	RaceDao raceDao;
-
-	@Autowired
-	PositionDao positionDao;
 
 	private static final Logger LOG = Logger.getLogger("BBTB");
 
