@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
 import org.junit.After;
@@ -11,16 +12,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import net.raebiger.bbtb.api.domain.PositionDomain;
 import net.raebiger.bbtb.api.domain.RaceDomain;
+import net.raebiger.bbtb.model.AccessController;
 import net.raebiger.bbtb.model.Position;
 import net.raebiger.bbtb.model.Race;
-import net.raebiger.bbtb.model.RaceDao;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:WebContent/WEB-INF/applicationContext-test.xml")
@@ -29,8 +29,8 @@ public class RaceUpdaterTest {
 
 	private RaceDomain inputDomain;
 
-	@Autowired
-	private RaceDao raceDao;
+	@Resource
+	private AccessController<Race> raceAccessController;
 
 	private Race race;
 
@@ -39,7 +39,7 @@ public class RaceUpdaterTest {
 
 		race = new Race();
 		race.setName("Dubu");
-		raceDao.persist(race);
+		raceAccessController.persist(race);
 
 		inputDomain = new RaceDomain();
 		inputDomain.setName("Dark Elves");
@@ -68,7 +68,7 @@ public class RaceUpdaterTest {
 	@Transactional
 	public void testUpdate() {
 
-		RaceUpdater updater = new RaceUpdater(inputDomain, raceDao);
+		RaceUpdater updater = new RaceUpdater(inputDomain, raceAccessController);
 		updater.update();
 
 		assertEquals("Names must be equal", inputDomain.getName(), race.getName());
