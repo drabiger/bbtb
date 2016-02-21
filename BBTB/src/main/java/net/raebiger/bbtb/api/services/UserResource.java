@@ -3,6 +3,7 @@ package net.raebiger.bbtb.api.services;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
@@ -17,14 +18,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.raebiger.bbtb.api.domain.UserDomain;
 import net.raebiger.bbtb.api.updaters.UserUpdater;
 import net.raebiger.bbtb.model.User;
-import net.raebiger.bbtb.model.UserDao;
+import net.raebiger.bbtb.model.UserSpecificsAccessController;
 
 @Path("users")
 @Produces(MediaType.APPLICATION_JSON)
@@ -36,8 +36,8 @@ public class UserResource {
 	@Context
 	private UriInfo uriInfo;
 
-	@Autowired
-	UserDao userDao;
+	@Resource
+	UserSpecificsAccessController userAccessController;
 
 	private static final Logger LOG = Logger.getLogger("BBTB");
 
@@ -50,7 +50,7 @@ public class UserResource {
 			throw new NotFoundException();
 		}
 
-		User userOrNull = userDao.findByEmailOrNull(idTokenString);
+		User userOrNull = userAccessController.findByEmailOrNull(idTokenString);
 		if (userOrNull == null) {
 			return null;
 		}
@@ -62,7 +62,7 @@ public class UserResource {
 	@GET
 	@Path("{uuid}")
 	public UserDomain getUser(@PathParam("uuid") @NotNull String uuid) {
-		User userOrNull = userDao.find(uuid);
+		User userOrNull = userAccessController.getByUuid(uuid);
 		if (userOrNull == null) {
 			return null;
 		}
@@ -74,7 +74,7 @@ public class UserResource {
 	@POST
 	public Response createUserAccount(UserDomain userInput) {
 
-		UserUpdater updater = new UserUpdater(userInput, userDao);
+		UserUpdater updater = new UserUpdater(userInput, userAccessController);
 		LOG.log(Level.INFO, "Creating user {0}.", userInput.getEmail());
 		return updater.create();
 	}

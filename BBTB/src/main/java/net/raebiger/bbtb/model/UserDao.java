@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service("userDao")
 @Transactional(propagation = Propagation.REQUIRED)
-public class UserDao {
+class UserDao {
 
 	private EntityManager entityManager;
 
@@ -32,7 +32,7 @@ public class UserDao {
 		entityManager.persist(user);
 	}
 
-	public List<User> getAllRaces() {
+	public List<User> getAllUsers() {
 		LOG.entering(getClass().getName(), "getAllUsers");
 		TypedQuery<User> query = entityManager.createQuery("SELECT u FROM BBTBUser u ORDER BY u.id", User.class);
 		List<User> resultList = query.getResultList();

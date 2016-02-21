@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Priority;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.client.Client;
@@ -24,7 +25,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import net.raebiger.bbtb.model.User;
-import net.raebiger.bbtb.model.UserDao;
+import net.raebiger.bbtb.model.UserSpecificsAccessController;
 import net.raebiger.bbtb.sessioninfo.SessionInfo;
 
 @Provider
@@ -33,8 +34,8 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
 	@Context
 	HttpServletRequest webRequest;
 
-	@Autowired
-	UserDao userDao;
+	@Resource
+	private UserSpecificsAccessController userAccessController;
 
 	@Autowired
 	SessionInfo sessionInfo;
@@ -75,8 +76,8 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
 					// TODO do we need the following code? is it all managed by
 					// sessionInfo?
 					String idTokenString = (String) webRequest.getSession().getAttribute("bbtbUserId");
-					if (idTokenString != null && userDao.findByEmailOrNull(idTokenString) != null) {
-						User userOrNull = userDao.findByEmailOrNull(idTokenString);
+					if (idTokenString != null && userAccessController.findByEmailOrNull(idTokenString) != null) {
+						User userOrNull = userAccessController.findByEmailOrNull(idTokenString);
 						if (userOrNull != null) {
 							LOG.info("Request by user: " + idTokenString);
 							authorized = true;

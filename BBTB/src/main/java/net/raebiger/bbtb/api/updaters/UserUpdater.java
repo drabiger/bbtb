@@ -10,20 +10,20 @@ import javax.ws.rs.core.Response;
 
 import net.raebiger.bbtb.api.domain.UserDomain;
 import net.raebiger.bbtb.model.User;
-import net.raebiger.bbtb.model.UserDao;
+import net.raebiger.bbtb.model.UserSpecificsAccessController;
 
 public class UserUpdater {
-	private UserDomain	input;
-	private UserDao		userDao;
+	private UserDomain						input;
+	private UserSpecificsAccessController	userAccessController;
 
 	private static final Logger LOG = Logger.getLogger("BBTB");
 
 	private static final String MSG_DISPLAYNAME_VALIDATION = "A user's display name must contain at least three "
 			+ "characters and a maximum of 15 and must not conflict with an existing display name.";
 
-	public UserUpdater(UserDomain input, UserDao userDao) {
+	public UserUpdater(UserDomain input, UserSpecificsAccessController userAccessController) {
 		this.input = input;
-		this.userDao = userDao;
+		this.userAccessController = userAccessController;
 	}
 
 	public Response create() {
@@ -34,7 +34,7 @@ public class UserUpdater {
 		User newUser = new User();
 		input.attachModel(newUser);
 		newUser.setEmail(input.getEmail());
-		userDao.persist(newUser);
+		userAccessController.persist(newUser);
 
 		return update();
 	}
@@ -44,7 +44,7 @@ public class UserUpdater {
 			return createResponseBadRequest(MSG_DISPLAYNAME_VALIDATION);
 		}
 
-		User existingUser = userDao.find(input.getUUID());
+		User existingUser = userAccessController.getByUuid(input.getUUID());
 		if (existingUser == null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("There is no user for given uuid.").build();
 		}
@@ -65,7 +65,7 @@ public class UserUpdater {
 			return false;
 		}
 
-		User existingUser = userDao.findByDisplayNameOrNull(input.getDisplayName());
+		User existingUser = userAccessController.findByDisplayNameOrNull(input.getDisplayName());
 		if (existingUser != null) {
 			if (existingUser.getUUID() != input.getUUID()) {
 				return false;

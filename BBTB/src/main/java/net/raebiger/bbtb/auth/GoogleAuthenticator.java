@@ -31,7 +31,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.gson.Gson;
 
 import net.raebiger.bbtb.model.User;
-import net.raebiger.bbtb.model.UserDao;
+import net.raebiger.bbtb.model.UserSpecificsAccessController;
 import net.raebiger.bbtb.sessioninfo.SessionInfo;
 
 @Service
@@ -62,8 +62,10 @@ public class GoogleAuthenticator extends HttpServlet {
 	 */
 	private static final JacksonFactory JSON_FACTORY = new JacksonFactory();
 
+	// strange -- when using @Resource here, userAccessController cannot be
+	// loaded
 	@Autowired
-	UserDao userDao;
+	UserSpecificsAccessController userAccessController;
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -103,7 +105,7 @@ public class GoogleAuthenticator extends HttpServlet {
 						System.out.println("User ID: " + payload.getSubject());
 						LOG.log(Level.INFO, "Verified Google user {0}", email);
 
-						User userOrNull = userDao.findByEmailOrNull(email);
+						User userOrNull = userAccessController.findByEmailOrNull(email);
 						if (userOrNull == null) {
 							// Case: Google verified user,
 							// but user has no BBTB account (LOGIN FAILED)
