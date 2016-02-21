@@ -29,6 +29,7 @@ import net.raebiger.bbtb.api.updaters.BoardPlacementUpdater;
 import net.raebiger.bbtb.api.updaters.BoardUpdater;
 import net.raebiger.bbtb.model.AccessController;
 import net.raebiger.bbtb.model.Board;
+import net.raebiger.bbtb.model.BoardSpecificsController;
 import net.raebiger.bbtb.model.Position;
 import net.raebiger.bbtb.model.Race;
 
@@ -43,7 +44,7 @@ public class BoardResource {
 	private UriInfo uriInfo;
 
 	@Resource
-	AccessController<Board> boardAccessController;
+	BoardSpecificsController boardAccessController;
 
 	@Resource
 	AccessController<Position> positionController;
@@ -70,6 +71,23 @@ public class BoardResource {
 		LOG.log(Level.INFO, "getAll");
 		List<BoardDomain> boardDomains = new ArrayList<BoardDomain>();
 		List<Board> allBoards = boardAccessController.getAll();
+
+		for (Board board : allBoards) {
+			BoardDomain boardDomain = new BoardDomain(board);
+			boardDomains.add(boardDomain);
+		}
+		return boardDomains;
+	}
+
+	@GET
+	@Path("my")
+	@Transactional(readOnly = true)
+	public List<BoardDomain> getMyBoards() {
+		// TODO enable XSRF protection by sending X-XSRF-TOKENs, see
+		// https://docs.angularjs.org/api/ng/service/$http
+		LOG.log(Level.INFO, "getMyBoards");
+		List<BoardDomain> boardDomains = new ArrayList<BoardDomain>();
+		List<Board> allBoards = boardAccessController.getMyBoards();
 
 		for (Board board : allBoards) {
 			BoardDomain boardDomain = new BoardDomain(board);

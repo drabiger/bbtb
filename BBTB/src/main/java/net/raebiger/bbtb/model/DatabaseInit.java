@@ -155,12 +155,13 @@ public class DatabaseInit {
 			positionDao.persist(pos5);
 		}
 
+		User userFlash = new User();
 		{
-			User userFlash = new User();
 			userFlash.setEmail("drabiger@googlemail.com");
 			userFlash.setDisplayName("Flash");
 			userDao.persist(userFlash);
-
+		}
+		{
 			Board board1 = new Board();
 			board1.setCreator(userFlash);
 			board1.setName("Aggressive Wood Elf Kickoff");
@@ -175,7 +176,41 @@ public class DatabaseInit {
 			board1.setColorRace1("#A00000");
 			board1.setColorRace2("#0099FF");
 			boardDao.persist(board1);
-
 		}
+
+		{
+			Board board2 = new Board();
+			board2.setCreator(userFlash);
+			board2.setName("Non-Aggressive Wood Elf Kickoff");
+			board2.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+					+ "Aliquam quis sollicitudin ante. Etiam sed accumsan nunc, ultricies efficitur tortor. "
+					+ "In hac habitasse platea dictumst. Nam tempus odio a nulla ultricies dictum.");
+			board2.setRace1(raceWoodElves);
+			board2.setRace2(raceHumans);
+			board2.addPlacement(1, 2, posWoodElvesLinemen);
+			board2.addPlacement(4, 10, posWoodElvesLinemen);
+			board2.addPlacement(5, 6, posWoodElvesLinemen);
+			board2.setColorRace1("#A00000");
+			board2.setColorRace2("#0099FF");
+			boardDao.persist(board2);
+		}
+
+		{
+			Board board3 = new Board();
+			board3.setCreator(userFlash);
+			board3.setName("Defensive Lineup Wood Elf");
+			board3.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+					+ "Aliquam quis sollicitudin ante. Etiam sed accumsan nunc, ultricies efficitur tortor. "
+					+ "In hac habitasse platea dictumst. Nam tempus odio a nulla ultricies dictum.");
+			board3.setRace1(raceWoodElves);
+			board3.setRace2(raceHumans);
+			board3.addPlacement(1, 2, posWoodElvesLinemen);
+			board3.addPlacement(4, 10, posWoodElvesLinemen);
+			board3.addPlacement(5, 6, posWoodElvesLinemen);
+			board3.setColorRace1("#A00000");
+			board3.setColorRace2("#0099FF");
+			boardDao.persist(board3);
+		}
+
 	}
 }

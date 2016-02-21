@@ -9,3 +9,7 @@
 table .min {
 	width: 10px;
 }
+
+.navbarInclude ~ .page-header {
+	margin-top: 80px;
+}

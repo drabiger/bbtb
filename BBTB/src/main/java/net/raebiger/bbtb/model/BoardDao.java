@@ -41,6 +41,13 @@ class BoardDao {
 
 	public List<Board> getAllBoards() {
 		LOG.entering(getClass().getName(), "getAllBoards");
+		TypedQuery<Board> query = entityManager.createQuery("SELECT b FROM Board b ORDER BY b.id", Board.class);
+		List<Board> resultList = query.getResultList();
+		return resultList;
+	}
+
+	public List<Board> getBoardsCreatedBy(User user) {
+		LOG.entering(getClass().getName(), "getBoardsCreatedBy");
 		TypedQuery<Board> query = entityManager
 				.createQuery("SELECT b FROM Board b WHERE b.creator =:user ORDER BY b.id", Board.class);
 		query.setParameter("user", sessionInfo.getCurrentUser());

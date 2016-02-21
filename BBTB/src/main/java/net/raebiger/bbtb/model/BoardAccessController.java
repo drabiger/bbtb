@@ -19,7 +19,7 @@ import net.raebiger.bbtb.sessioninfo.SessionInfo;
 
 @Repository("boardAccessController")
 @Transactional(propagation = Propagation.REQUIRED)
-public class BoardAccessController implements AccessController<Board>, BoardSpecificsController {
+public class BoardAccessController implements BoardSpecificsController {
 	@Autowired
 	BoardDao boardDao;
 
@@ -91,6 +91,12 @@ public class BoardAccessController implements AccessController<Board>, BoardSpec
 
 	public boolean mayUserModify(Board object) {
 		return permissionManager.mayUserModify(object);
+	}
+
+	@Override
+	public List<Board> getMyBoards() {
+		List<Board> myBoards = boardDao.getBoardsCreatedBy(sessionInfo.getCurrentUser());
+		return myBoards;
 	}
 
 }

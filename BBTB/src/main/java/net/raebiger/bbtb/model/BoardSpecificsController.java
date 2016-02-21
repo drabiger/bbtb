@@ -1,5 +1,9 @@
 package net.raebiger.bbtb.model;
 
-public interface BoardSpecificsController {
+import java.util.List;
+
+public interface BoardSpecificsController extends AccessController<Board> {
 	public BoardPlacement findPlacementOrNull(Board board, int x, int y);
+
+	public List<Board> getMyBoards();
 }
