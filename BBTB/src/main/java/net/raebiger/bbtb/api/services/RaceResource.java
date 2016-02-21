@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -19,14 +20,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.raebiger.bbtb.api.domain.RaceDomain;
 import net.raebiger.bbtb.api.updaters.RaceUpdater;
+import net.raebiger.bbtb.model.AccessController;
 import net.raebiger.bbtb.model.Race;
-import net.raebiger.bbtb.model.RaceDao;
 
 @Path("races")
 @Produces(MediaType.APPLICATION_JSON)
@@ -38,15 +38,15 @@ public class RaceResource {
 	@Context
 	private UriInfo uriInfo;
 
-	@Autowired
-	RaceDao raceDao;
+	@Resource
+	AccessController<Race> raceAccessController;
 
 	private static final Logger LOG = Logger.getLogger("BBTB");
 
 	@GET
 	@Path("{uuid}")
 	public RaceDomain getSingleRace(@PathParam("uuid") @NotNull String uuid) {
-		Race race = raceDao.find(uuid);
+		Race race = raceAccessController.getByUuid(uuid);
 		RaceDomain raceDomain = new RaceDomain(race);
 		return raceDomain;
 	}
@@ -59,7 +59,7 @@ public class RaceResource {
 		// https://docs.angularjs.org/api/ng/service/$http
 		LOG.log(Level.INFO, "getAll");
 		List<RaceDomain> raceDomains = new ArrayList<RaceDomain>();
-		List<Race> allRaces = raceDao.getAllRaces();
+		List<Race> allRaces = raceAccessController.getAll();
 
 		for (Race race : allRaces) {
 			RaceDomain raceDomain = new RaceDomain(race);
@@ -80,8 +80,8 @@ public class RaceResource {
 		// set values of input RaceDomain to fresh model
 		Race newModel = new Race();
 		race.attachModel(newModel);
-		raceDao.persist(newModel);
-		RaceUpdater updater = new RaceUpdater(race, raceDao);
+		raceAccessController.persist(newModel);
+		RaceUpdater updater = new RaceUpdater(race, raceAccessController);
 		response = updater.update();
 
 		return response;
@@ -94,18 +94,18 @@ public class RaceResource {
 			return Response.status(Response.Status.BAD_REQUEST).entity("UUIDs do not match").build();
 		}
 
-		RaceUpdater updater = new RaceUpdater(race, raceDao);
+		RaceUpdater updater = new RaceUpdater(race, raceAccessController);
 		return updater.update();
 	}
 
 	@DELETE
 	@Path("{uuid}")
 	public Response deleteRace(@PathParam("uuid") @NotNull String uuid) {
-		Race raceToDelete = raceDao.find(uuid);
+		Race raceToDelete = raceAccessController.getByUuid(uuid);
 		if (raceToDelete == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("UUID does not exist").build();
 		}
-		raceDao.delete(raceToDelete);
+		raceAccessController.delete(raceToDelete);
 		return Response.status(Response.Status.NO_CONTENT).build();
 	}
 }

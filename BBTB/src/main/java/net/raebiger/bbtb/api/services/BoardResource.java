@@ -20,7 +20,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +30,7 @@ import net.raebiger.bbtb.api.updaters.BoardUpdater;
 import net.raebiger.bbtb.model.AccessController;
 import net.raebiger.bbtb.model.Board;
 import net.raebiger.bbtb.model.Position;
-import net.raebiger.bbtb.model.RaceDao;
+import net.raebiger.bbtb.model.Race;
 
 @Path("boards")
 @Produces(MediaType.APPLICATION_JSON)
@@ -49,8 +48,8 @@ public class BoardResource {
 	@Resource
 	AccessController<Position> positionController;
 
-	@Autowired
-	RaceDao raceDao;
+	@Resource
+	AccessController<Race> raceController;
 
 	private static final Logger LOG = Logger.getLogger("BBTB");
 
@@ -148,7 +147,7 @@ public class BoardResource {
 			return Response.status(Response.Status.BAD_REQUEST).entity("UUIDs do not match").build();
 		}
 
-		BoardUpdater updater = new BoardUpdater(board, boardAccessController, raceDao);
+		BoardUpdater updater = new BoardUpdater(board, boardAccessController, raceController);
 		return updater.update();
 	}
 

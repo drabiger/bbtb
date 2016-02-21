@@ -10,23 +10,23 @@ import javax.ws.rs.core.Response;
 
 import net.raebiger.bbtb.api.domain.PositionDomain;
 import net.raebiger.bbtb.api.domain.RaceDomain;
+import net.raebiger.bbtb.model.AccessController;
 import net.raebiger.bbtb.model.Position;
 import net.raebiger.bbtb.model.Race;
-import net.raebiger.bbtb.model.RaceDao;
 
 public class RaceUpdater {
-	private RaceDomain	input;
-	private RaceDao		raceDao;
+	private RaceDomain				input;
+	private AccessController<Race>	raceController;
 
 	private static final Logger LOG = Logger.getLogger("BBTB");
 
-	public RaceUpdater(RaceDomain input, RaceDao raceDao) {
+	public RaceUpdater(RaceDomain input, AccessController<Race> raceController) {
 		this.input = input;
-		this.raceDao = raceDao;
+		this.raceController = raceController;
 	}
 
 	public Response update() {
-		Race existingRace = raceDao.find(input.getUUID());
+		Race existingRace = raceController.getByUuid(input.getUUID());
 		if (existingRace == null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("There is no race for given uuid.").build();
 		}
@@ -50,7 +50,7 @@ public class RaceUpdater {
 				}
 			}
 		}
-		raceDao.persist(existingRace);
+		raceController.persist(existingRace);
 
 		URI raceLocation;
 		Response response;

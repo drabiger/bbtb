@@ -9,19 +9,19 @@ import net.raebiger.bbtb.api.domain.BoardDomain;
 import net.raebiger.bbtb.model.AccessController;
 import net.raebiger.bbtb.model.Board;
 import net.raebiger.bbtb.model.Race;
-import net.raebiger.bbtb.model.RaceDao;
 
 public class BoardUpdater {
 	private BoardDomain input;
 
 	private static final Logger		LOG	= Logger.getLogger("BBTB");
-	private RaceDao					raceDao;
+	private AccessController<Race>	raceController;
 	private AccessController<Board>	boardAccManager;
 
-	public BoardUpdater(BoardDomain input, AccessController<Board> boardAccManager, RaceDao raceDao) {
+	public BoardUpdater(BoardDomain input, AccessController<Board> boardAccManager,
+			AccessController<Race> raceController) {
 		this.input = input;
 		this.boardAccManager = boardAccManager;
-		this.raceDao = raceDao;
+		this.raceController = raceController;
 	}
 
 	public Response update() {
@@ -45,7 +45,7 @@ public class BoardUpdater {
 		}
 
 		if (input.getRace1() != null && !input.getRace1().getUUID().equals(existingBoard.getRace1().getUUID())) {
-			Race newRace1 = raceDao.find(input.getRace1().getUUID());
+			Race newRace1 = raceController.getByUuid(input.getRace1().getUUID());
 			if (newRace1 == null) {
 				LOG.log(Level.INFO, "UUID of race1 '{0}' does not match any existing race", input.getRace1().getUUID());
 				return Response.status(Response.Status.BAD_REQUEST)
@@ -56,7 +56,7 @@ public class BoardUpdater {
 		}
 
 		if (input.getRace2() != null && !input.getRace2().getUUID().equals(existingBoard.getRace2().getUUID())) {
-			Race newRace2 = raceDao.find(input.getRace2().getUUID());
+			Race newRace2 = raceController.getByUuid(input.getRace2().getUUID());
 			if (newRace2 == null) {
 				LOG.log(Level.INFO, "UUID of race2 '{0}' does not match any existing race", input.getRace2().getUUID());
 				return Response.status(Response.Status.BAD_REQUEST)
