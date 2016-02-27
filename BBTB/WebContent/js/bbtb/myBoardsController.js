@@ -1,12 +1,18 @@
 define([ 'angular' ], function(angular) {
-	var app = angular.module('myBoards', [ 'user' ]);
+	var app = angular.module('myBoards', [ 'user', 'ngAnimate', 'ui.bootstrap' ]);
 
 	app.controller('MyBoardsController', [ '$http', '$scope', '$q', '$timeout',
 			'authenticatedUser',
 			function($http, $scope, $q, $timeout, authenticatedUser) {
 				var thiz = this;
 				
-				var boards = null;
+				this.boards = null;
+				
+				this.totalItems = 0;
+				
+				this.currentPage = 1;
+				
+				this.itemsPerPage = 5;
 
 				initializeMyBoards = function(user) {
 					loadMyBoards();
@@ -16,7 +22,8 @@ define([ 'angular' ], function(angular) {
 					$http.get('bbtb/api/boards/my').
 					success(function(data, status, headers, config) {
 				 		console.log("get test board", data);
-				 		boards = data;
+				 		thiz.boards = data;
+				 		thiz.totalItems = thiz.boards.length;
 				    }).
 				    error(function(data, status, headers, config) {
 				    	// log error
@@ -24,8 +31,18 @@ define([ 'angular' ], function(angular) {
 				    });
 				};
 				
-				this.getBoards = function() {
-					return boards;
+				this.getBoardsPaginated = function() {
+					if(thiz.boards) {
+						var startIdx = (thiz.currentPage - 1) * thiz.itemsPerPage;
+						var endIdx = startIdx + thiz.itemsPerPage;
+						return thiz.boards.slice(startIdx, endIdx);
+					} else {
+						return null;
+					}
+				};
+				
+				this.pageChanged = function() {
+					console.log('Page changed to: ' + thiz.currentPage);
 				};
 		
 				authenticatedUser.registerHandler(initializeMyBoards);
