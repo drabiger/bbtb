@@ -5,9 +5,8 @@ require.config({
         "angular": {
             exports: "angular"
         },
-        "angular-route": {
-            deps: ["angular"]
-        }
+        "bootstrap" : "angular",
+        "boardController" : "angular"
     },
     
     paths: {

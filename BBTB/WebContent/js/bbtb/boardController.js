@@ -1,8 +1,15 @@
 define(['angular'], function(angular) {
 	var app = angular.module('board', ['user']);
 
-	app.controller('BoardController', [ '$http', '$scope', '$q', '$timeout', 'authenticatedUser',
-			function($http, $scope, $q, $timeout, authenticatedUser) {
+	app.config(['$locationProvider', function($locationProvider) {
+		$locationProvider.html5Mode({
+			  enabled: true,
+			  requireBase: false
+			});
+    }]);
+	
+	app.controller('BoardController', [ '$http', '$scope', '$location', '$q', '$timeout', 'authenticatedUser',
+			function($http, $scope, $location, $q, $timeout, authenticatedUser) {
 				var thiz = this;
 				
 				var board = [['o','o','o','o','|','o','o','o','o','o','o','o','|','o','o','o','o'],
@@ -63,9 +70,11 @@ define(['angular'], function(angular) {
 					this.initBoardModel();
 				};
 				
+				this.boardId = $location.search()['b'];
+				
 				// private
 				this.initBoardModel = function() {
-					 $http.get('bbtb/api/boards/TEST').
+					 $http.get('bbtb/api/boards/' + thiz.boardId).
 					 	success(function(data, status, headers, config) {
 					 		thiz.boardModel = data;
 					 		console.log("get test board", thiz.boardModel);

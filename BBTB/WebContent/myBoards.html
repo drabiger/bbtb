@@ -28,7 +28,7 @@
 				<div class="col-md-9">
 					<uib-pagination ng-change="controller.pageChanged()" boundary-links="true" total-items="controller.totalItems" ng-model="controller.currentPage" class="pagination-sm" rotate="true" max-size="5" force-ellipses="true" items-per-page="controller.itemsPerPage"></uib-pagination>
 					<div class="list-group">
-						<a href="#" class="list-group-item"
+						<a href="board.html?b={{board.uuid}}" class="list-group-item"
 							ng-repeat="board in controller.getBoardsPaginated()">
 							<h4 class="list-group-item-heading">{{board.name}}</h4>
 							<p class="list-group-item-text">{{board.race1.name}} vs {{board.race2.name}}</p>
