@@ -26,7 +26,14 @@
 			</div>
 			<div class="row">
 				<div class="col-md-9">
-					<uib-pagination ng-change="controller.pageChanged()" boundary-links="true" total-items="controller.totalItems" ng-model="controller.currentPage" class="pagination-sm" rotate="true" max-size="5" force-ellipses="true" items-per-page="controller.itemsPerPage"></uib-pagination>
+					<div class="row bbtb-pagination-row">
+						<div class="col-md-6">
+							<uib-pagination ng-change="controller.pageChanged()" boundary-links="true" total-items="controller.totalItems" ng-model="controller.currentPage" class="pagination-sm" rotate="true" max-size="5" force-ellipses="true" items-per-page="controller.itemsPerPage" template-url="listsAndTables/pagination.html"></uib-pagination>
+						</div>
+						<div class="col-md-6 bbtb-pagination-buttons">
+							<a href="#" class="btn btn-primary btn-success btn-sm"><span class="glyphicon glyphicon-plus"></span> New Board</a>
+						</div>
+					</div>
 					<div class="list-group">
 						<a href="board.html?b={{board.uuid}}" class="list-group-item"
 							ng-repeat="board in controller.getBoardsPaginated()">

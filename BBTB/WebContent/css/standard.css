@@ -13,3 +13,47 @@ table .min {
 .navbarInclude ~ .page-header {
 	margin-top: 80px;
 }
+
+ul.pagination.bbtb {
+	margin: 0px;
+}
+
+ul.bbtb-pagination {
+	margin: 0px;
+	display: inline-block;
+	padding-left: 0;
+	border-radius: 4px;
+}
+
+.bbtb-pagination>li {
+	display: inline;
+}
+
+div.bbtb-pagination-row {
+	margin-bottom: 3px;	
+}
+
+.bbtb-pagination a {
+	color: #777;
+}
+
+.bbtb-pagination>.active>a {
+	font-weight: bold;
+}
+
+.bbtb-pagination>.disabled>a, .bbtb-pagination>.disabled>a:focus, .bbtb-pagination>.disabled>a:hover,
+	.bbtb-pagination>.disabled>span, .bbtb-pagination>.disabled>span:focus,
+	.bbtb-pagination>.disabled>span:hover {
+	color: #ddd;
+	cursor: not-allowed;
+	background-color: #fff;
+	border-color: #ddd
+}
+
+.bbtb-pagination>li>a, .bbtb-pagination>li>a:hover, .bbtb-pagination>li>a:visited, .bbtb-pagination>li>a:link, .bbtb-pagination>li>a:active {
+	text-decoration: none;
+}
+
+.bbtb-pagination-buttons>a {
+	float: right;
+}
