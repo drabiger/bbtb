@@ -1,5 +1,6 @@
 package net.raebiger.bbtb.api.services;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -32,6 +33,7 @@ import net.raebiger.bbtb.model.Board;
 import net.raebiger.bbtb.model.BoardSpecificsController;
 import net.raebiger.bbtb.model.Position;
 import net.raebiger.bbtb.model.Race;
+import net.raebiger.bbtb.sessioninfo.SessionInfo;
 
 @Path("boards")
 @Produces(MediaType.APPLICATION_JSON)
@@ -51,6 +53,9 @@ public class BoardResource {
 
 	@Resource
 	AccessController<Race> raceController;
+
+	@Resource
+	SessionInfo sessionInfo;
 
 	private static final Logger LOG = Logger.getLogger("BBTB");
 
@@ -167,6 +172,26 @@ public class BoardResource {
 
 		BoardUpdater updater = new BoardUpdater(board, boardAccessController, raceController);
 		return updater.update();
+	}
+
+	@POST
+	@Path("")
+	public Response createBoard() {
+		Response response;
+		try {
+			Board board = new Board();
+			board.setCreator(sessionInfo.getCurrentUser());
+			board.setName("New Board");
+			boardAccessController.persist(board);
+			BoardDomain boardDomain = new BoardDomain(board);
+			URI boardLocation = new URI(boardDomain.getHref());
+			response = Response.created(boardLocation).build();
+			LOG.log(Level.INFO, "Created board {0}", board.getUUID());
+		} catch (Exception e) {
+			LOG.log(Level.SEVERE, "Can't build URI for board.", e);
+			response = Response.serverError().build();
+		}
+		return response;
 	}
 
 }

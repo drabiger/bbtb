@@ -31,7 +31,7 @@
 							<uib-pagination ng-change="controller.pageChanged()" boundary-links="true" total-items="controller.totalItems" ng-model="controller.currentPage" class="pagination-sm" rotate="true" max-size="5" force-ellipses="true" items-per-page="controller.itemsPerPage" template-url="listsAndTables/pagination.html"></uib-pagination>
 						</div>
 						<div class="col-md-6 bbtb-pagination-buttons">
-							<a href="#" class="btn btn-primary btn-success btn-sm"><span class="glyphicon glyphicon-plus"></span> New Board</a>
+							<a href="#" class="btn btn-primary btn-success btn-sm" ng-click="controller.createBoard();"><span class="glyphicon glyphicon-plus"></span> New Board</a>
 						</div>
 					</div>
 					<div class="list-group">

@@ -41,6 +41,21 @@ define([ 'angular' ], function(angular) {
 					}
 				};
 				
+				this.createBoard = function() {
+					$http.post('bbtb/api/boards').
+					then(function(response) {
+				 		console.log("create board", response);
+				 		var location = response.headers("location");
+				 		var splitResponse = location.split("/");
+				 		var uuid = splitResponse[splitResponse.length-1];
+				 		window.location.replace("board.html?b=" + uuid);
+				    }, 
+				    function(response) {
+				    	// log error
+				    	console.log("error creating board. response=" + response);
+				    });
+				};
+				
 				this.pageChanged = function() {
 					console.log('Page changed to: ' + thiz.currentPage);
 				};

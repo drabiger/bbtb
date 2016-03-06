@@ -119,6 +119,6 @@ public class BoardDomain extends AbstractDomain<Board> {
 
 	public String getHref() {
 		// TODO can we get the 'race' part dynamically?
-		return getBaseApiUrl() + "races/" + getUUID();
+		return getBaseApiUrl() + "boards/" + getUUID();
 	}
 }
