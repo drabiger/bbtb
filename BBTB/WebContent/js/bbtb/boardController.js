@@ -48,7 +48,8 @@ define(['angular'], function(angular) {
 				
 				var race2Model;
 				
-				var boardModelIdx = new Array;	// (x,y) of board -> (xx,yy) of boardModel
+				var boardModelIdx = new Array;	// (x,y) of board -> (xx,yy) of
+												// boardModel
 				
 				var boardCells = new Array; 	// Koordinaten des models
 				
@@ -80,12 +81,18 @@ define(['angular'], function(angular) {
 					 		console.log("get test board", thiz.boardModel);
 					 		thiz.setBoardCells();
 					 		
-					 		var promise1 = $http.get('bbtb/api/races/' + thiz.boardModel.race1.uuid).error(function(data, status, headers, config) {
-					 			console.log("Could not fetch data for race1");
-					 		});
-					 		var promise2 = $http.get('bbtb/api/races/' + thiz.boardModel.race2.uuid).error(function(data, status, headers, config) {
-					 			console.log("Could not fetch data for race2");
-					 		});
+					 		var promise1 = "";
+				 			if(thiz.boardModel.race1 != null) {
+					 			return $http.get('bbtb/api/races/' + thiz.boardModel.race1.uuid).error(function(data, status, headers, config) {
+					 				console.log("Could not fetch data for race1");
+					 			});
+				 			}
+					 		var promise2 = "";
+					 		if(thiz.boardModel.race1 != null) {
+						 		var promise2 = $http.get('bbtb/api/races/' + thiz.boardModel.race2.uuid).error(function(data, status, headers, config) {
+						 			console.log("Could not fetch data for race2");
+						 		});
+					 		}
 					 		$q.all({race1Promise : promise1, race2Promise: promise2 }).then(function(data) {
 					 			thiz.race1Model = data.race1Promise.data;
 					 			thiz.race2Model = data.race2Promise.data;
@@ -134,8 +141,10 @@ define(['angular'], function(angular) {
 								} else {
 									modelCol++;
 								}
-								// console.log("col="+col+", row="+row + " -> ("+modelRow + "," + modelCol+")");
-								// modelRow = Y value on server, modelCol = X value on server
+								// console.log("col="+col+", row="+row + " ->
+								// ("+modelRow + "," + modelCol+")");
+								// modelRow = Y value on server, modelCol = X
+								// value on server
 								boardModelIdx[row][col] = [modelCol, modelRow];
 							}
 						}
@@ -144,21 +153,24 @@ define(['angular'], function(angular) {
 				
 				// public: (xx,yy) of board -> (x,y) of boardModel
 				this.getModelXValue = function(row, col) {
-					// console.log("getModel! xx="+boardModelIdx[x][y][0] + ", yy="+boardModelIdx[x][y][1]);
+					// console.log("getModel! xx="+boardModelIdx[x][y][0] + ",
+					// yy="+boardModelIdx[x][y][1]);
 					if(!boardModelIdx[row][col]) {
-//						console.log("undefined boardModelIdx for row=" + row + ", col="+ col);
+// console.log("undefined boardModelIdx for row=" + row + ", col="+ col);
 						return undefined;
 					} else {
-//						console.log("("+row+","+col+") -> (" + boardModelIdx[row][col][0] + ", "+boardModelIdx[row][col][1] + ")");
+// console.log("("+row+","+col+") -> (" + boardModelIdx[row][col][0] + ",
+// "+boardModelIdx[row][col][1] + ")");
 						return boardModelIdx[row][col][0];
 					}
 				};
 				
 				// public
 				this.getModelYValue = function(row, col) {
-					// console.log("getModel! xx="+boardModelIdx[x][y][0] + ", yy="+boardModelIdx[x][y][1]);
+					// console.log("getModel! xx="+boardModelIdx[x][y][0] + ",
+					// yy="+boardModelIdx[x][y][1]);
 					if(!boardModelIdx[row][col]) {
-//						console.log("undefined boardModelIdx for row=" + row + ", col="+ col);
+// console.log("undefined boardModelIdx for row=" + row + ", col="+ col);
 						return undefined;
 					}
 					return boardModelIdx[row][col][1];
@@ -168,7 +180,7 @@ define(['angular'], function(angular) {
 				this.setBoardCells = function() {
 					for (var i = 0; i < thiz.boardModel.placements.length; ++i) {
 						var p = thiz.boardModel.placements[i];
-//						console.log("placement: ", p);
+// console.log("placement: ", p);
 						boardCells[p.x][p.y] = p;
 					}
 				};
@@ -183,7 +195,8 @@ define(['angular'], function(angular) {
 					}
 				};
 				
-				// public: get placement with (x,y) of board coordinates which will be mapped to boardModel coordinates
+				// public: get placement with (x,y) of board coordinates which
+				// will be mapped to boardModel coordinates
 				this.getBoardPlacement = function(row, col) {
 					var modelRow = thiz.getModelXValue(row,col);
 					var modelCol = thiz.getModelYValue(row,col);
@@ -196,11 +209,15 @@ define(['angular'], function(angular) {
 				this.setBoardCellStyle = function() {
 					if(!uuid2positions) {
 						uuid2positions = new Object;
-						for(var i = 0; i < thiz.race1Model.positions.length; ++i) {
-							uuid2positions[thiz.race1Model.positions[i].uuid] = {positions: thiz.race1Model.positions[i], race: thiz.race1Model };
+						if(typeof thiz.race1Model != "undefined") {
+							for(var i = 0; i < thiz.race1Model.positions.length; ++i) {
+								uuid2positions[thiz.race1Model.positions[i].uuid] = {positions: thiz.race1Model.positions[i], race: thiz.race1Model };
+							}
 						}
-						for(var i = 0; i < thiz.race2Model.positions.length; ++i) {
-							uuid2positions[thiz.race2Model.positions[i].uuid] = {positions: thiz.race2Model.positions[i], race: thiz.race2Model };
+						if(typeof thiz.race2Model != "undefined") {
+							for(var i = 0; i < thiz.race2Model.positions.length; ++i) {
+								uuid2positions[thiz.race2Model.positions[i].uuid] = {positions: thiz.race2Model.positions[i], race: thiz.race2Model };
+							}
 						}
 					}
 					
@@ -212,7 +229,7 @@ define(['angular'], function(angular) {
 				
 				// private
 				this.setCellStyle = function(placement) {
-//					console.log("placement: ", placement);
+// console.log("placement: ", placement);
 					
 					var positionsMap = uuid2positions[placement.position.uuid];
 					if(!positionsMap) {
@@ -220,7 +237,8 @@ define(['angular'], function(angular) {
 						return;
 					}
 					var raceOfPlacement = positionsMap.race;
-//					console.log("setting cell style for (" + placement.x + "," + placement.y + ")");
+// console.log("setting cell style for (" + placement.x + "," + placement.y +
+// ")");
 					if(raceOfPlacement.uuid === thiz.race1Model.uuid) {
 						boardCellStyle[placement.x][placement.y] = thiz.getRace1CellStyle();
 					}
@@ -259,7 +277,8 @@ define(['angular'], function(angular) {
 					console.log("initPlacements");
 					// set event handlers based on 'draggable' property
 					
-					// dragstart 1) for all placements on board 2) for all positions of race tables
+					// dragstart 1) for all placements on board 2) for all
+					// positions of race tables
 					$("td.bbtb-boardCell").off('dragstart');
 					$("td.bbtb-boardCell").on('dragstart', thiz.dragStart);
 					
@@ -289,7 +308,8 @@ define(['angular'], function(angular) {
 					});
 				};
 				
-				// public, reference to this function is injected in initPlacements()
+				// public, reference to this function is injected in
+				// initPlacements()
 				this.dragStart = function(event, ui) {
 					console.log("dd start (" + event.originalEvent.target.getAttribute("x-bbtb-board-x") + "," + event.originalEvent.target.getAttribute("x-bbtb-board-y") + ")");
 					event.originalEvent.dataTransfer.setData("placement", event.originalEvent.target.getAttribute("x-bbtb-placement"));
@@ -298,7 +318,8 @@ define(['angular'], function(angular) {
 					event.originalEvent.dataTransfer.setData("source-y", event.originalEvent.target.getAttribute("x-bbtb-board-y"));
 				};
 				
-				// public, reference to this function is injected in initPlacements()
+				// public, reference to this function is injected in
+				// initPlacements()
 				this.dragStop = function(event) {
 					var sourceX = event.originalEvent.dataTransfer.getData("source-x");
 					if(sourceX === 'new') {
@@ -310,11 +331,13 @@ define(['angular'], function(angular) {
 					}
 				};
 				
-				// public, reference to this function is injected in initPlacements()
+				// public, reference to this function is injected in
+				// initPlacements()
 				this.dragStopRemoveFromBoard = function (event) {
 					var sourceX = event.originalEvent.dataTransfer.getData("source-x");
 					if(sourceX === 'new') {
-						// do nothing if a new placement has been dropped into the race tables
+						// do nothing if a new placement has been dropped into
+						// the race tables
 						return;
 					} else {
 						var placementUuid = event.originalEvent.dataTransfer.getData("placement");
@@ -342,8 +365,10 @@ define(['angular'], function(angular) {
 								  console.log('delete success. location=', response.headers('Location'));
 								  
 								  // TODO
-								  // actually, we would only need to remove the placement from boardModel.
-								  // this call is simpler but triggers some network overhead
+								  // actually, we would only need to remove
+									// the placement from boardModel.
+								  // this call is simpler but triggers some
+									// network overhead
 								  boardCells[p.x][p.y] = undefined;
 								  boardCellStyle[p.x][p.y] = undefined;
 								  thiz.initBoardModel();
@@ -417,8 +442,11 @@ define(['angular'], function(angular) {
 							  console.log("getBoardPlacement for ("+placement.x+","+placement.y+"): ", boardCells[placement.x][placement.y]);
 							  
 							  // TODO
-							  // actually, we would only need to 1) update the new placement with its new uuid and 2) add it to boardModel.
-							  // this call is simpler but triggers some network overhead
+							  // actually, we would only need to 1) update the
+								// new placement with its new uuid and 2) add it
+								// to boardModel.
+							  // this call is simpler but triggers some
+								// network overhead
 							  thiz.initBoardModel();
 						  }).
 						  error(function(data, status, headers, config) {
@@ -537,6 +565,6 @@ define(['angular'], function(angular) {
 });
 
 /*
-  to call a function inside the controller from the console, example:
-  angular.element(document.getElementById('TABLE')).scope().controller.initPlacements()
-*/
+ * to call a function inside the controller from the console, example:
+ * angular.element(document.getElementById('TABLE')).scope().controller.initPlacements()
+ */

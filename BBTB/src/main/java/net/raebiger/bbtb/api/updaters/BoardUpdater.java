@@ -9,6 +9,7 @@ import net.raebiger.bbtb.api.domain.BoardDomain;
 import net.raebiger.bbtb.model.AccessController;
 import net.raebiger.bbtb.model.Board;
 import net.raebiger.bbtb.model.Race;
+import net.raebiger.bbtb.util.StringUtil;
 
 public class BoardUpdater {
 	private BoardDomain input;
@@ -38,7 +39,7 @@ public class BoardUpdater {
 			dirty = true;
 		}
 
-		String trimmedDescription = input.getDescription().trim();
+		String trimmedDescription = StringUtil.getTrimmedValueOrNull(input.getDescription());
 		if (trimmedDescription != null && !trimmedDescription.equals(existingBoard.getDescription())) {
 			existingBoard.setDescription(trimmedDescription);
 			dirty = true;
