@@ -13,6 +13,12 @@
 	src="js/lib/require.js"></script>
 
 <body>
+	<div id="errorMessageContainer" class="bbtb-stickyErrorMessage alert alert-danger alert-dismissible fade" role="alert">
+		<a class="close" onclick="$('#errorMessageContainer').removeClass('in');" aria-label="Close">
+    		<span aria-hidden="true">&times;</span>
+  		</a>
+  		<div id="errorMessage"><strong>Error!</strong> test</div> 
+  	</div>
 	<div class="container" ng-controller="UserController as user">
 		<div class="container" ng-controller="BoardController as controller">
 			<div ng-include="'nav-top.html'"></div>

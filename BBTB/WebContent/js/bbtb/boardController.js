@@ -78,18 +78,18 @@ define(['angular'], function(angular) {
 					 $http.get('bbtb/api/boards/' + thiz.boardId).
 					 	success(function(data, status, headers, config) {
 					 		thiz.boardModel = data;
-					 		console.log("get test board", thiz.boardModel);
+					 		console.log("get board", thiz.boardModel);
 					 		thiz.setBoardCells();
 					 		
 					 		var promise1 = "";
 				 			if(thiz.boardModel.race1 != null) {
-					 			return $http.get('bbtb/api/races/' + thiz.boardModel.race1.uuid).error(function(data, status, headers, config) {
+				 				promise1 = $http.get('bbtb/api/races/' + thiz.boardModel.race1.uuid).error(function(data, status, headers, config) {
 					 				console.log("Could not fetch data for race1");
 					 			});
 				 			}
 					 		var promise2 = "";
 					 		if(thiz.boardModel.race1 != null) {
-						 		var promise2 = $http.get('bbtb/api/races/' + thiz.boardModel.race2.uuid).error(function(data, status, headers, config) {
+						 		promise2 = $http.get('bbtb/api/races/' + thiz.boardModel.race2.uuid).error(function(data, status, headers, config) {
 						 			console.log("Could not fetch data for race2");
 						 		});
 					 		}
@@ -477,6 +477,9 @@ define(['angular'], function(angular) {
 					  },
 					  function(response) {
 						  console.log('error putting board, response: ' + response);
+						  $("#errorMessage").text("Could not save board.");
+						  $("#errorMessageContainer").delay(200).addClass("in");
+						  initializeBoard();
 					  });
 				};
 				
