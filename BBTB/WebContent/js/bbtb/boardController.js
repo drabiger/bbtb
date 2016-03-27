@@ -78,9 +78,15 @@ define(['angular'], function(angular) {
 						  resolve: { 
 							  	currentSelection : function() { 
 							  		if(race1OrRace2 == 'race1') { 
-							  			return thiz.race1Model; 
+							  			return { 
+							  				item: thiz.race1Model,
+							  				color: thiz.boardModel.colorRace1
+							  			};
 							  		} else { 
-							  			return thiz.race2Model; 
+							  			return { 
+							  				item: thiz.race2Model,
+							  				color: thiz.boardModel.colorRace2
+							  			};
 							  		}
 							  	}
 						  },  
@@ -90,18 +96,22 @@ define(['angular'], function(angular) {
 					      controller: 'raceSelectionController'
 					    });
 
-				    modalInstance.result.then(function (selectedItem) {
+				    modalInstance.result.then(function (value) {
+				    	var selectedItem = value.item;
+				    	var selectedColor = value.color;
 				    	if(race1OrRace2 == 'race1') {
-					    	if(thiz.boardModel.race1 === null || thiz.boardModel.race1.uuid != selectedItem.uuid) {
+					    	if(thiz.boardModel.race1 === null || thiz.boardModel.race1.uuid != selectedItem.uuid || thiz.boardModel.colorRace1 != selectedColor) {
 					    		thiz.race1Model = selectedItem;
 					    		thiz.boardModel.race1 = { uuid : selectedItem.uuid };
+					    		thiz.boardModel.colorRace1 = selectedColor;
 					    		thiz.boardModelDirty = true;
 					    		thiz.persistBoardModel(true);
 					    	}
 				    	} else {
-					    	if(thiz.boardModel.race2 === null || thiz.boardModel.race2.uuid != selectedItem.uuid) {
+					    	if(thiz.boardModel.race2 === null || thiz.boardModel.race2.uuid != selectedItem.uuid || thiz.boardModel.colorRace2 != selectedColor) {
 					    		thiz.race2Model = selectedItem;
 					    		thiz.boardModel.race2 = { uuid : selectedItem.uuid };
+					    		thiz.boardModel.colorRace2 = selectedColor;
 					    		thiz.boardModelDirty = true;
 					    		thiz.persistBoardModel(true);
 					    	}			    		

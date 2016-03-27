@@ -1,15 +1,17 @@
 define([ 'angular' ], function(angular) {
-	var app = angular.module('raceSelection', [ 'ui.bootstrap' ]);
+	var app = angular.module('raceSelection', [ 'ui.bootstrap', 'ngColorPicker' ]);
 
 	var controller = function($http, $scope, $uibModalInstance, currentSelection) {
 		$scope.items = [];
 
-		$scope.selectedItem = undefined;
+		$scope.selectedItem = currentSelection.item;
+
+		$scope.preSelection = currentSelection.item;
 
 		$scope.setting = false;
-		
-		$scope.preSelection = currentSelection;
 
+		$scope.selectedColor = currentSelection.color;
+		
 		$http.get('bbtb/api/races/all').success(
 				function(data, status, headers, config) {
 					$scope.items = data;
@@ -18,7 +20,7 @@ define([ 'angular' ], function(angular) {
 			// log error
 			console.error("error");
 		});
-
+		
 		$scope.getItems = function() {
 			return $scope.items;
 		};
@@ -29,11 +31,10 @@ define([ 'angular' ], function(angular) {
 
 		$scope.setSelectedItem = function(item) {
 			$scope.selectedItem = item;
-			$scope.ok();
 		};
 
 		$scope.ok = function() {
-			$uibModalInstance.close($scope.selectedItem);
+			$uibModalInstance.close({item: $scope.selectedItem, color: $scope.selectedColor });
 		};
 
 		$scope.cancel = function() {

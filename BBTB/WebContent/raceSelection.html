@@ -6,25 +6,30 @@
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/standard.css" />
 	<link rel="stylesheet" type="text/css" href="css/raceSelection.css" />
+	<link rel="stylesheet" type="text/css" href="css/color-picker.css" />
 </head>
 
 <script type="text/javascript" data-main="js/raceSelection.js" src="js/lib/require.js"></script>
 
 <body>
 	<div class="modal-header">
-		<h4 class="modal-title">Select Team Race</h4>
+		<h4 class="modal-title">Create a Team</h4>
 	</div>
 	<div class="modal-body">
+		<h4><small class="text-muted">Choose a Race</small></h4>
 		<div class="list-group">
-			<button type="button" ng-class="{active:item.uuid==preSelection.uuid}" class="list-group-item" ng-repeat="item in getItems()" ng-click="setSelectedItem(item)" tabindex="0">
+			<button type="button" ng-class="{active:item.uuid==selectedItem.uuid}" class="list-group-item" ng-repeat="item in getItems()" ng-click="setSelectedItem(item)" tabindex="0">
 				{{ item.name }}
 			</button>
 		</div>
-		<div ng-show="preSelection" class="alert alert-warning" role="alert">
+		<div ng-show="preSelection && preSelection.uuid != selectedItem.uuid" class="alert alert-warning" role="alert">
 			<i class="glyphicon glyphicon-info-sign"></i> Note that selecting a different race will remove your previous placements.
 		</div>
+		<h4><small class="text-muted">Choose a Color</small></h4>
+		<ng-color-picker selected="selectedColor"></ng-color-picker>
 		<div class="modal-footer">
-			<button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+			<button class="btn btn-success" type="button" ng-click="ok()">OK</button>
+			<button class="btn btn-default" type="button" ng-click="cancel()">Cancel</button>
 		</div>
 	</div>
 </body>

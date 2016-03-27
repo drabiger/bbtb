@@ -10,6 +10,7 @@ require
 				"angular-aria" : "lib/angular-aria-min",
 				"angular.ui.bootstrap" : "lib/ui-bootstrap-tpls-1.2.0",
 				"gapi" : "https://apis.google.com/js/api:client.js",
+				"ngColorPicker" : "lib/color-picker",
 				waitSeconds : 40
 			},
 			shim : {
@@ -22,8 +23,9 @@ require
 				"bootstrap" : {
 					deps : [ "jquery", "angular" ]
 				},
+				'ngColorPicker' : 'angular',
 				"bbtb/raceSelectionController" : {
-					deps : [ "angular" ]
+					deps : [ "angular", "ngColorPicker" ]
 				},
 				"bbtb/boardController" : {
 					deps: ["angular", "bbtb/raceSelectionController"]
@@ -38,9 +40,9 @@ define('gapi', [ 'https://apis.google.com/js/client.js' ], function() {
 
 // Start the main app logic.
 require([ 'jquery', 'bootstrap', 'angular', 'angular.animate',
-		'angular.ui.bootstrap', 'bbtb/boardController',
+		'angular.ui.bootstrap', 'ngColorPicker', 'bbtb/boardController',
 		'bbtb/raceSelectionController', 'bbtb/userController' ], function($,
-		bootstrap, angular, angularAnimate, angularBootstrap, boardController,
+		bootstrap, angular, angularAnimate, angularBootstrap, ngColorPicker, boardController,
 		raceSelectionController, userController) {
 	// jQuery, bootstrap and angular are all
 	// loaded and can be used here now.
