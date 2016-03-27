@@ -25,9 +25,6 @@ require
 				"bbtb/raceSelectionController" : {
 					deps : [ "angular" ]
 				},
-				"bbtb/boardController" : {
-					deps: ["angular", "bbtb/raceSelectionController"]
-				}
 			}
 		});
 
@@ -37,15 +34,14 @@ define('gapi', [ 'https://apis.google.com/js/client.js' ], function() {
 });
 
 // Start the main app logic.
-require([ 'jquery', 'bootstrap', 'angular', 'angular.animate',
-		'angular.ui.bootstrap', 'bbtb/boardController',
-		'bbtb/raceSelectionController', 'bbtb/userController' ], function($,
-		bootstrap, angular, angularAnimate, angularBootstrap, boardController,
-		raceSelectionController, userController) {
+require([ 'jquery', 'bootstrap', 'angular', 'angular.animate', 
+		'angular.ui.bootstrap', 'bbtb/raceSelectionController' ], function($,
+		bootstrap, angular, angularAnimate, angularBootstrap,
+		raceSelectionController) {
 	// jQuery, bootstrap and angular are all
 	// loaded and can be used here now.
 	angular.element().ready(function() {
 		// bootstrap the app manually
-		angular.bootstrap(document, [ 'board' ]);
+		angular.bootstrap(document, [ 'raceSelection' ]);
 	});
 });

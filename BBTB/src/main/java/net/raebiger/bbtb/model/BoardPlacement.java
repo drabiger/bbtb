@@ -23,17 +23,33 @@ public class BoardPlacement extends AbstractEntityWithUUID {
 	@JoinColumn(name = "BOARD_ID", nullable = false)
 	private Board board;
 
+	@Column(name = "team1Or2", nullable = false)
+	private Team team;
+
+	public enum Team {
+		TEAM1, TEAM2
+	}
+
 	public BoardPlacement() {
 		// needed by JPA
 		super();
 	}
 
-	public BoardPlacement(Board board, int x, int y, Position position) {
+	public BoardPlacement(Board board, int x, int y, Position position, Team team) {
 		super();
+		setTeam(team);
 		setBoard(board);
 		setX(x);
 		setY(y);
 		setPosition(position);
+	}
+
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
 	}
 
 	public int getX() {

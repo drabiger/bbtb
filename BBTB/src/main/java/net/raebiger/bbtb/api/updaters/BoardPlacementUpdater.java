@@ -53,7 +53,7 @@ public class BoardPlacementUpdater {
 		} else {
 			// placement must be created
 			Position position = positionAccController.getByUuid(input.getPosition().getUUID());
-			existingPlacement = board.addPlacement(input.getX(), input.getY(), position);
+			existingPlacement = board.addPlacement(input.getX(), input.getY(), position, input.getTeam());
 			dirty = true;
 		}
 

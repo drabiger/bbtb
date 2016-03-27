@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import net.raebiger.bbtb.model.BoardPlacement.Team;
 import net.raebiger.bbtb.permission.PermissionObject;
 
 @Entity
@@ -55,19 +56,19 @@ public class Board extends AbstractEntityWithUUID implements PermissionObject {
 		description = value;
 	}
 
-	public Race getRace1() {
+	public Race getTeam1Race() {
 		return race1;
 	}
 
-	public void setRace1(Race race1) {
+	public void setTeam1Race(Race race1) {
 		this.race1 = race1;
 	}
 
-	public Race getRace2() {
+	public Race getTeam2Race() {
 		return race2;
 	}
 
-	public void setRace2(Race race2) {
+	public void setTeam2Race(Race race2) {
 		this.race2 = race2;
 	}
 
@@ -87,25 +88,25 @@ public class Board extends AbstractEntityWithUUID implements PermissionObject {
 		this.colorRace2 = colorRace2;
 	}
 
-	public BoardPlacement addPlacement(int x, int y, Position position) {
-		if (position.getRace() != getRace1() && position.getRace() != getRace2()) {
+	public BoardPlacement addPlacement(int x, int y, Position position, Team team) {
+		if ((team == Team.TEAM1 && getTeam1Race() != position.getRace())
+				|| team == Team.TEAM2 && getTeam2Race() != position.getRace()) {
 			throw new IndexOutOfBoundsException(
 					"The input position does not belong to either race1 or race2 of this board.");
 		}
 
-		long numberOfPlacementsForThisRace = placements.stream()
-				.filter(p -> p.getPosition().getRace().equals(position.getRace())).count();
-		if (numberOfPlacementsForThisRace > 10) {
+		long numberOfPlacementsForThisTeam = placements.stream().filter(p -> p.getTeam().equals(team)).count();
+		if (numberOfPlacementsForThisTeam > 10) {
 			throw new IndexOutOfBoundsException("Limit of 11 for this race on board reached.");
 		}
 
-		long numberOfPlacementsForThisPosition = placements.stream().filter(p -> p.getPosition().equals(position))
-				.count();
+		long numberOfPlacementsForThisPosition = placements.stream()
+				.filter(p -> (p.getTeam().equals(team) && p.getPosition().equals(position))).count();
 		if (numberOfPlacementsForThisPosition >= position.getQuantity()) {
 			throw new IndexOutOfBoundsException("Limit for given position reached.");
 		}
 
-		BoardPlacement placement = new BoardPlacement(this, x, y, position);
+		BoardPlacement placement = new BoardPlacement(this, x, y, position, team);
 		placements.add(placement);
 		return placement;
 	}

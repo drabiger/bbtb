@@ -93,7 +93,7 @@
 						</div>
 						<div id="bbtb-race1" class="panel panel-default">
 							<div class="panel-heading">
-								<h3 class="panel-title">{{controller.getRace1Model().name}}</h3>
+								<h3 class="panel-title">{{controller.getRace1Model().name}} <a href="#" ng-click="openRaceSelectModal('race1');"><i class="glyphicon glyphicon-pencil"></i></a></h3>
 							</div>
 							<div class="panel-body">
 								<table class="bbtb-board-racetable">
@@ -101,16 +101,16 @@
 										<td class="bbtb-boardCell"
 											ng-style="controller.getRace1CellStyle()" draggable="true"
 											x-bbtb-board-x="new" x-bbtb-board-y="new"
-											x-bbtb-position="{{pos.uuid}}">{{pos.abbreviation}}</td>
+											x-bbtb-position="{{pos.uuid}}" x-bbtb-team="TEAM1">{{pos.abbreviation}}</td>
 										<td>{{pos.name}}</td>
-										<td>{{controller.getRacePositionRemainingQuantity(pos)}}</td>
+										<td>{{controller.getRacePositionRemainingQuantity(pos, 'TEAM1')}}</td>
 									</tr>
 								</table>
 							</div>
 						</div>
 						<div id="bbtb-race2" class="panel panel-default">
 							<div class="panel-heading">
-								<h3 class="panel-title">{{controller.getRace2Model().name}}</h3>
+								<h3 class="panel-title">{{controller.getRace2Model().name}} <a href="#" ng-click="openRaceSelectModal('race2');"><i class="glyphicon glyphicon-pencil"></i></a></h3>
 							</div>
 							<div class="panel-body">
 								<table class="bbtb-board-racetable">
@@ -118,9 +118,9 @@
 										<td class="bbtb-boardCell"
 											ng-style="controller.getRace2CellStyle()" draggable="true"
 											x-bbtb-board-x="new" x-bbtb-board-y="new"
-											x-bbtb-position="{{pos.uuid}}">{{pos.abbreviation}}</td>
+											x-bbtb-position="{{pos.uuid}}" x-bbtb-team="TEAM2">{{pos.abbreviation}}</td>
 										<td>{{pos.name}}</td>
-										<td>{{controller.getRacePositionRemainingQuantity(pos)}}</td>
+										<td>{{controller.getRacePositionRemainingQuantity(pos, 'TEAM2')}}</td>
 									</tr>
 								</table>
 							</div>

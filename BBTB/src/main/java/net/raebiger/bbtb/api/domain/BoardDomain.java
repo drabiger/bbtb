@@ -39,11 +39,11 @@ public class BoardDomain extends AbstractDomain<Board> {
 		setDescription(model.getDescription());
 		setColorRace1(model.getColorRace1());
 		setColorRace2(model.getColorRace2());
-		if (model.getRace1() != null) {
-			race1 = new RaceDomainLink(model.getRace1());
+		if (model.getTeam1Race() != null) {
+			race1 = new RaceDomainLink(model.getTeam1Race());
 		}
-		if (model.getRace2() != null) {
-			race2 = new RaceDomainLink(model.getRace2());
+		if (model.getTeam2Race() != null) {
+			race2 = new RaceDomainLink(model.getTeam2Race());
 		}
 
 		for (BoardPlacement placement : model.getPlacements()) {
@@ -52,6 +52,7 @@ public class BoardDomain extends AbstractDomain<Board> {
 			placementDomain.setY(placement.getY());
 			PositionDomain positionDomain = new PositionDomain(placement.getPosition());
 			placementDomain.setPosition(positionDomain);
+			placementDomain.setTeam(placement.getTeam());
 			placements.add(placementDomain);
 		}
 

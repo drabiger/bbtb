@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.raebiger.bbtb.model.BoardPlacement.Team;
+
 @Component
 @Transactional(propagation = Propagation.REQUIRED)
 public class DatabaseInit {
@@ -168,11 +170,11 @@ public class DatabaseInit {
 			board1.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
 					+ "Aliquam quis sollicitudin ante. Etiam sed accumsan nunc, ultricies efficitur tortor. "
 					+ "In hac habitasse platea dictumst. Nam tempus odio a nulla ultricies dictum.");
-			board1.setRace1(raceWoodElves);
-			board1.setRace2(raceHumans);
-			board1.addPlacement(5, 6, posWoodElvesLinemen);
-			board1.addPlacement(6, 12, posWoodElvesLinemen);
-			board1.addPlacement(6, 13, posWoodElvesLinemen);
+			board1.setTeam1Race(raceWoodElves);
+			board1.setTeam2Race(raceHumans);
+			board1.addPlacement(5, 6, posWoodElvesLinemen, Team.TEAM1);
+			board1.addPlacement(6, 12, posWoodElvesLinemen, Team.TEAM1);
+			board1.addPlacement(6, 13, posWoodElvesLinemen, Team.TEAM1);
 			board1.setColorRace1("#A00000");
 			board1.setColorRace2("#0099FF");
 			boardDao.persist(board1);
@@ -185,11 +187,11 @@ public class DatabaseInit {
 			board2.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
 					+ "Aliquam quis sollicitudin ante. Etiam sed accumsan nunc, ultricies efficitur tortor. "
 					+ "In hac habitasse platea dictumst. Nam tempus odio a nulla ultricies dictum.");
-			board2.setRace1(raceWoodElves);
-			board2.setRace2(raceHumans);
-			board2.addPlacement(1, 2, posWoodElvesLinemen);
-			board2.addPlacement(4, 10, posWoodElvesLinemen);
-			board2.addPlacement(5, 6, posWoodElvesLinemen);
+			board2.setTeam1Race(raceWoodElves);
+			board2.setTeam2Race(raceHumans);
+			board2.addPlacement(1, 2, posWoodElvesLinemen, Team.TEAM1);
+			board2.addPlacement(4, 10, posWoodElvesLinemen, Team.TEAM1);
+			board2.addPlacement(5, 6, posWoodElvesLinemen, Team.TEAM1);
 			board2.setColorRace1("#A00000");
 			board2.setColorRace2("#0099FF");
 			boardDao.persist(board2);
@@ -202,11 +204,11 @@ public class DatabaseInit {
 			board3.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
 					+ "Aliquam quis sollicitudin ante. Etiam sed accumsan nunc, ultricies efficitur tortor. "
 					+ "In hac habitasse platea dictumst. Nam tempus odio a nulla ultricies dictum.");
-			board3.setRace1(raceWoodElves);
-			board3.setRace2(raceHumans);
-			board3.addPlacement(1, 2, posWoodElvesLinemen);
-			board3.addPlacement(4, 10, posWoodElvesLinemen);
-			board3.addPlacement(5, 6, posWoodElvesLinemen);
+			board3.setTeam1Race(raceWoodElves);
+			board3.setTeam2Race(raceHumans);
+			board3.addPlacement(1, 2, posWoodElvesLinemen, Team.TEAM1);
+			board3.addPlacement(4, 10, posWoodElvesLinemen, Team.TEAM1);
+			board3.addPlacement(5, 6, posWoodElvesLinemen, Team.TEAM1);
 			board3.setColorRace1("#A00000");
 			board3.setColorRace2("#0099FF");
 			boardDao.persist(board3);

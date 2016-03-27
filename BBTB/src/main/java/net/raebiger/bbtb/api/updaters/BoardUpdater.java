@@ -1,13 +1,17 @@
 package net.raebiger.bbtb.api.updaters;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.core.Response;
 
 import net.raebiger.bbtb.api.domain.BoardDomain;
 import net.raebiger.bbtb.model.AccessController;
 import net.raebiger.bbtb.model.Board;
+import net.raebiger.bbtb.model.BoardPlacement;
+import net.raebiger.bbtb.model.BoardPlacement.Team;
 import net.raebiger.bbtb.model.Race;
 import net.raebiger.bbtb.util.StringUtil;
 
@@ -40,30 +44,35 @@ public class BoardUpdater {
 		}
 
 		String trimmedDescription = StringUtil.getTrimmedValueOrNull(input.getDescription());
-		if (trimmedDescription != null && !trimmedDescription.equals(existingBoard.getDescription())) {
-			existingBoard.setDescription(trimmedDescription);
-			dirty = true;
+		if (trimmedDescription != null) {
+			String safeHtmlValue = trimmedDescription; // ESAPI.encoder().encodeForHTML(trimmedDescription);
+			if (!safeHtmlValue.equals(existingBoard.getDescription())) {
+				existingBoard.setDescription(safeHtmlValue);
+				dirty = true;
+			}
 		}
 
-		if (input.getRace1() != null && !input.getRace1().getUUID().equals(existingBoard.getRace1().getUUID())) {
+		if (input.getRace1() != null && (existingBoard.getTeam1Race() == null
+				|| !input.getRace1().getUUID().equals(existingBoard.getTeam1Race().getUUID()))) {
 			Race newRace1 = raceController.getByUuid(input.getRace1().getUUID());
 			if (newRace1 == null) {
 				LOG.log(Level.INFO, "UUID of race1 '{0}' does not match any existing race", input.getRace1().getUUID());
 				return Response.status(Response.Status.BAD_REQUEST)
 						.entity("UUID of race1 does not match any existing race").build();
 			}
-			existingBoard.setRace1(newRace1);
+			existingBoard.setTeam1Race(newRace1);
 			dirty = true;
 		}
 
-		if (input.getRace2() != null && !input.getRace2().getUUID().equals(existingBoard.getRace2().getUUID())) {
+		if (input.getRace2() != null && (existingBoard.getTeam2Race() == null
+				|| !input.getRace2().getUUID().equals(existingBoard.getTeam2Race().getUUID()))) {
 			Race newRace2 = raceController.getByUuid(input.getRace2().getUUID());
 			if (newRace2 == null) {
 				LOG.log(Level.INFO, "UUID of race2 '{0}' does not match any existing race", input.getRace2().getUUID());
 				return Response.status(Response.Status.BAD_REQUEST)
 						.entity("UUID of race2 does not match any existing race").build();
 			}
-			existingBoard.setRace2(newRace2);
+			existingBoard.setTeam2Race(newRace2);
 			dirty = true;
 		}
 
@@ -77,42 +86,12 @@ public class BoardUpdater {
 			dirty = true;
 		}
 
-		// Map<String, BoardPlacementDomain> uuidsOfInputPlacements =
-		// input.getPlacements().stream()
-		// .collect(Collectors.toMap(p -> p.getUUID(), p -> p));
+		List<BoardPlacement> placementsToBeRemoved = existingBoard.getPlacements().stream()
+				.filter(p -> (p.getTeam() == Team.TEAM1 && p.getPosition().getRace() != existingBoard.getTeam1Race())
+						|| (p.getTeam() == Team.TEAM2 && p.getPosition().getRace() != existingBoard.getTeam2Race()))
+				.collect(Collectors.toList());
 
-		// Map<String, BoardPlacement> uuidsOfExistingPlacements =
-		// existingBoard.getPlacements().stream()
-		// .collect(Collectors.toMap(p -> p.getUUID(), p -> p));
-		//
-		// Map<String, BoardPlacement> uuidsOfRemovedPlacements =
-		// existingBoard.getPlacements().stream()
-		// .filter(p -> !uuidsOfInputPlacements.containsKey(p.getUUID()))
-		// .collect(Collectors.toMap(p -> p.getUUID(), p -> p));
-		//
-		// Map<String, BoardPlacementDomain> uuidsOfAddedPlacements =
-		// input.getPlacements().stream()
-		// .filter(p -> !uuidsOfInputPlacements.containsKey(p.getUUID()))
-		// .collect(Collectors.toMap(p -> p.getUUID(), p -> p));
-		//
-		// Map<String, BoardPlacementDomain> uuidsOfProbablyModifiedPlacements =
-		// input.getPlacements().stream()
-		// .filter(p -> uuidsOfInputPlacements.containsKey(p.getUUID()))
-		// .collect(Collectors.toMap(p -> p.getUUID(), p -> p));
-
-		// TODO this was never finished
-
-		// for (Entry<String, BoardPlacementDomain> entry :
-		// uuidsOfProbablyModifiedPlacements.entrySet()) {
-		// String uuid = entry.getKey();
-		// BoardPlacementDomain inputPlacement = entry.getValue();
-		// BoardPlacement existingPlacement =
-		// uuidsOfExistingPlacements.get(uuid);
-		// if (existingPlacement.getX() != inputPlacement.getX()) {
-		// dirty = true;
-		// existingPlacement.setX(inputPlacement.set);
-		// }
-		// }
+		placementsToBeRemoved.forEach(p -> existingBoard.removePlacement(p));
 
 		if (dirty) {
 			boardAccManager.persist(existingBoard);

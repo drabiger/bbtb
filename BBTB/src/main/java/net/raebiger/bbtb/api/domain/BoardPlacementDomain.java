@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import net.raebiger.bbtb.model.BoardPlacement;
+import net.raebiger.bbtb.model.BoardPlacement.Team;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
@@ -15,12 +16,22 @@ public class BoardPlacementDomain extends AbstractDomain<BoardPlacement> {
 
 	private int y;
 
+	private Team team;
+
 	public BoardPlacementDomain() {
 		super();
 	}
 
 	public BoardPlacementDomain(BoardPlacement placement) {
 		super(placement);
+	}
+
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
 	}
 
 	public PositionDomain getPosition() {

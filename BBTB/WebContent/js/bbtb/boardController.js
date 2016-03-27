@@ -1,5 +1,5 @@
 define(['angular'], function(angular) {
-	var app = angular.module('board', ['user']);
+	var app = angular.module('board', ['user', 'ui.bootstrap', 'raceSelection']);
 
 	app.config(['$locationProvider', function($locationProvider) {
 		$locationProvider.html5Mode({
@@ -8,8 +8,8 @@ define(['angular'], function(angular) {
 			});
     }]);
 	
-	app.controller('BoardController', [ '$http', '$scope', '$location', '$q', '$timeout', 'authenticatedUser',
-			function($http, $scope, $location, $q, $timeout, authenticatedUser) {
+	app.controller('BoardController', [ '$http', '$scope', '$location', '$q', '$timeout', '$uibModal', 'authenticatedUser',
+			function($http, $scope, $location, $q, $timeout, $uibModal, authenticatedUser) {
 				var thiz = this;
 				
 				var board = [['o','o','o','o','|','o','o','o','o','o','o','o','|','o','o','o','o'],
@@ -73,6 +73,45 @@ define(['angular'], function(angular) {
 				
 				this.boardId = $location.search()['b'];
 				
+				$scope.openRaceSelectModal = function(race1OrRace2) {
+					var modalInstance = $uibModal.open({
+						  resolve: { 
+							  	currentSelection : function() { 
+							  		if(race1OrRace2 == 'race1') { 
+							  			return thiz.race1Model; 
+							  		} else { 
+							  			return thiz.race2Model; 
+							  		}
+							  	}
+						  },  
+						  size: "sm",
+					      animation: 'true',
+					      templateUrl: 'raceSelection.html',
+					      controller: 'raceSelectionController'
+					    });
+
+				    modalInstance.result.then(function (selectedItem) {
+				    	if(race1OrRace2 == 'race1') {
+					    	if(thiz.boardModel.race1 === null || thiz.boardModel.race1.uuid != selectedItem.uuid) {
+					    		thiz.race1Model = selectedItem;
+					    		thiz.boardModel.race1 = { uuid : selectedItem.uuid };
+					    		thiz.boardModelDirty = true;
+					    		thiz.persistBoardModel(true);
+					    	}
+				    	} else {
+					    	if(thiz.boardModel.race2 === null || thiz.boardModel.race2.uuid != selectedItem.uuid) {
+					    		thiz.race2Model = selectedItem;
+					    		thiz.boardModel.race2 = { uuid : selectedItem.uuid };
+					    		thiz.boardModelDirty = true;
+					    		thiz.persistBoardModel(true);
+					    	}			    		
+				    	}
+				    	console.log('race selected: ', selectedItem);
+				    }, function () {
+				      console.log('No race selected');
+				    });
+				};
+				
 				// private
 				this.initBoardModel = function() {
 					 $http.get('bbtb/api/boards/' + thiz.boardId).
@@ -88,7 +127,7 @@ define(['angular'], function(angular) {
 					 			});
 				 			}
 					 		var promise2 = "";
-					 		if(thiz.boardModel.race1 != null) {
+					 		if(thiz.boardModel.race2 != null) {
 						 		promise2 = $http.get('bbtb/api/races/' + thiz.boardModel.race2.uuid).error(function(data, status, headers, config) {
 						 			console.log("Could not fetch data for race2");
 						 		});
@@ -207,16 +246,16 @@ define(['angular'], function(angular) {
 				
 				// private
 				this.setBoardCellStyle = function() {
-					if(!uuid2positions) {
-						uuid2positions = new Object;
+					if(!thiz.uuid2positions) {
+						thiz.uuid2positions = new Object;
 						if(typeof thiz.race1Model != "undefined") {
 							for(var i = 0; i < thiz.race1Model.positions.length; ++i) {
-								uuid2positions[thiz.race1Model.positions[i].uuid] = {positions: thiz.race1Model.positions[i], race: thiz.race1Model };
+								thiz.uuid2positions[thiz.race1Model.positions[i].uuid] = {positions: thiz.race1Model.positions[i], race: thiz.race1Model };
 							}
 						}
 						if(typeof thiz.race2Model != "undefined") {
 							for(var i = 0; i < thiz.race2Model.positions.length; ++i) {
-								uuid2positions[thiz.race2Model.positions[i].uuid] = {positions: thiz.race2Model.positions[i], race: thiz.race2Model };
+								thiz.uuid2positions[thiz.race2Model.positions[i].uuid] = {positions: thiz.race2Model.positions[i], race: thiz.race2Model };
 							}
 						}
 					}
@@ -231,7 +270,7 @@ define(['angular'], function(angular) {
 				this.setCellStyle = function(placement) {
 // console.log("placement: ", placement);
 					
-					var positionsMap = uuid2positions[placement.position.uuid];
+					var positionsMap = thiz.uuid2positions[placement.position.uuid];
 					if(!positionsMap) {
 						console.log("error: cannot find position with uuid " + placement.position.uuid + " in uuid2positions");
 						return;
@@ -239,10 +278,11 @@ define(['angular'], function(angular) {
 					var raceOfPlacement = positionsMap.race;
 // console.log("setting cell style for (" + placement.x + "," + placement.y +
 // ")");
-					if(raceOfPlacement.uuid === thiz.race1Model.uuid) {
+					if(placement.team === 'TEAM1' && thiz.race1Model && raceOfPlacement.uuid === thiz.race1Model.uuid) {
 						boardCellStyle[placement.x][placement.y] = thiz.getRace1CellStyle();
 					}
-					if(raceOfPlacement.uuid === thiz.race2Model.uuid) {
+					
+					if(placement.team === 'TEAM2' && thiz.race2Model && raceOfPlacement.uuid === thiz.race2Model.uuid) {
 						boardCellStyle[placement.x][placement.y] = thiz.getRace2CellStyle();
 					}
 				};
@@ -314,6 +354,7 @@ define(['angular'], function(angular) {
 					console.log("dd start (" + event.originalEvent.target.getAttribute("x-bbtb-board-x") + "," + event.originalEvent.target.getAttribute("x-bbtb-board-y") + ")");
 					event.originalEvent.dataTransfer.setData("placement", event.originalEvent.target.getAttribute("x-bbtb-placement"));
 					event.originalEvent.dataTransfer.setData("position", event.originalEvent.target.getAttribute("x-bbtb-position"));
+					event.originalEvent.dataTransfer.setData("team", event.originalEvent.target.getAttribute("x-bbtb-team"));
 					event.originalEvent.dataTransfer.setData("source-x", event.originalEvent.target.getAttribute("x-bbtb-board-x"));
 					event.originalEvent.dataTransfer.setData("source-y", event.originalEvent.target.getAttribute("x-bbtb-board-y"));
 				};
@@ -324,7 +365,8 @@ define(['angular'], function(angular) {
 					var sourceX = event.originalEvent.dataTransfer.getData("source-x");
 					if(sourceX === 'new') {
 						var positionUuid = event.originalEvent.dataTransfer.getData("position");
-						thiz.createNewPlacement(positionUuid, event.target);
+						var team = event.originalEvent.dataTransfer.getData("team");
+						thiz.createNewPlacement(positionUuid, team, event.target);
 					} else {
 						var placementUuid = event.originalEvent.dataTransfer.getData("placement");
 						thiz.movePlacement(placementUuid, event.target);
@@ -382,13 +424,14 @@ define(['angular'], function(angular) {
 				
 				// private
 				// called by dragStop()
-				this.createNewPlacement = function(positionUuid, targetElement) {
+				this.createNewPlacement = function(positionUuid, team, targetElement) {
 					var position = thiz.getPositionByUuid(positionUuid);
 					if (position) {
 						var placement = {
 								'position' : position,
+								'team' : team,
 								'x' : 'new',
-								'y' : 'new'
+								'y' : 'new',
 						};
 						thiz.persistPlacement(placement, targetElement);
 					} else {
@@ -469,11 +512,14 @@ define(['angular'], function(angular) {
 				};
 				
 				// private, called by saveBoardModelName()
-				this.persistBoardModel = function() {
+				this.persistBoardModel = function(reloadBoard) {
 					$http.put('/bbtb/api/boards/' + thiz.boardModel.uuid, thiz.boardModel).
 					 then(function(response) {
 						  console.log('put success. location=', response.headers('Location'));
 						  thiz.boardModelDirty = false;
+						  if(reloadBoard) {
+							  initializeBoard();
+						  }
 					  },
 					  function(response) {
 						  console.log('error putting board, response: ' + response);
@@ -485,20 +531,36 @@ define(['angular'], function(angular) {
 				
 				// public
 				this.getRace1Model = function() {
-					return thiz.race1Model;
+					if(thiz.race1Model !== undefined) {
+						return thiz.race1Model;
+					} else {
+						return {
+							name: "No race set",
+							positions: [],
+							norace: true
+						};
+					}
 				};
 				
 				// public
 				this.getRace2Model = function() {
-					return thiz.race2Model;
+					if(thiz.race2Model !== undefined) {
+						return thiz.race2Model;
+					} else {
+						return {
+							name: "No race set",
+							positions: [],
+							norace: true
+						};
+					}
 				};
 				
 				// public
-				this.getRacePositionRemainingQuantity = function(position) {
+				this.getRacePositionRemainingQuantity = function(position, team) {
 					var numOnBoard = 0;
 					for (var i = 0; i < thiz.boardModel.placements.length; ++i) {
 						var p = thiz.boardModel.placements[i];
-						if(p.position.uuid === position.uuid) {
+						if(p.team === team && p.position.uuid === position.uuid) {
 							++numOnBoard;
 						};
 					}
@@ -540,12 +602,20 @@ define(['angular'], function(angular) {
 				// public
 				this.saveBoardModel = function() {
 					if(thiz.boardModelDirty) {
-						thiz.persistBoardModel();
+						thiz.persistBoardModel(false);
 					}
 				};
 				
 				// callback for authenticatedUser service in user module
 				initializeBoard = function(user) {
+					thiz.boardModel = null;					
+					thiz.race1Model = null;
+					thiz.race2Model = null;
+					thiz.boardModelIdx = new Array;
+					thiz.boardCells = new Array;
+					thiz.boardCellStyle = new Array;
+					thiz.uuid2positions = undefined;
+					thiz.initialized = false;
 					thiz.initBoardModelIdx();
 					thiz.initBoardModel();
 				}
@@ -566,6 +636,7 @@ define(['angular'], function(angular) {
 		});
 	
 });
+
 
 /*
  * to call a function inside the controller from the console, example:

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/standard.css" />
+	<link rel="stylesheet" type="text/css" href="css/raceSelection.css" />
+</head>
+
+<script type="text/javascript" data-main="js/raceSelection.js" src="js/lib/require.js"></script>
+
+<body>
+	<div class="modal-header">
+		<h4 class="modal-title">Select Team Race</h4>
+	</div>
+	<div class="modal-body">
+		<div class="list-group">
+			<button type="button" ng-class="{active:item.uuid==preSelection.uuid}" class="list-group-item" ng-repeat="item in getItems()" ng-click="setSelectedItem(item)" tabindex="0">
+				{{ item.name }}
+			</button>
+		</div>
+		<div ng-show="preSelection" class="alert alert-warning" role="alert">
+			<i class="glyphicon glyphicon-info-sign"></i> Note that selecting a different race will remove your previous placements.
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+		</div>
+	</div>
+</body>
+</html>
