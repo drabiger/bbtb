@@ -47,6 +47,10 @@ define(['angular', 'bbtb/login'], function(angular, login) {
 	 
 	 this.scope = $scope;
 	 
+	 $scope.setRedirect = function(redirect) {
+		$scope.redirectToWelcomePage = redirect; 
+	 };
+	 
 	 this.loadCurrentBBTBUser = function() {
 		 // try login based on http session		 
 		 $http.get('bbtb/api/users/@me').
@@ -90,8 +94,6 @@ define(['angular', 'bbtb/login'], function(angular, login) {
 					  if(xhr.status === 200) {
 						  // i.e. BBTB GoogleTokenVerifyer confirms Google login
 						  // yet, no user data from BBTB
-						  thiz.triedAuthentication = true;
-						  thiz.isAuthenticated = true;
 						  console.log('BBTB confirms Google login: ' + xhr.responseText);
 
 						  // try to get user data from BBTB
@@ -123,7 +125,9 @@ define(['angular', 'bbtb/login'], function(angular, login) {
 						  authenticatedUser.setAuthenticatedUser(null);
 						  thiz.authStatusMessage += " But no BBTB account linked.";
 						  console.log("Google log granted but no BBTB account linked. status = " + status);
-						  // window.location.replace("createUser.html");
+						  if($scope.redirectToWelcomePage) {
+							  window.location.replace("welcome.html");
+						  }
 					  }
 				  };
 				  xhr.send(id_token);
@@ -132,6 +136,9 @@ define(['angular', 'bbtb/login'], function(angular, login) {
 		  } else {
 			  thiz.authStatusMessage += " No grant from Google.";
 			  console.log('no google user logged in');
+			  if($scope.redirectToWelcomePage) {
+				  window.location.replace("welcome.html");
+			  }
 		  }		 
 	 };
 	 

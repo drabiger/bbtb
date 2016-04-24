@@ -12,34 +12,44 @@
 	src="js/lib/require.js"></script>
 
 <body>
-	<div class="container" ng-controller="UserController as user">
+	<div class="container" ng-controller="UserController as user" ng-init="setRedirect(true)">
 		<div class="container"
 			ng-controller="MyBoardsController as controller">
 			<div ng-include="'nav-top.html'" class="navbarInclude"></div>
 			<div ng-hide="user.isAuthenticated" class="row">
 				<p>{{user.authStatusMessage}}</p>
 			</div>
-			<div class="page-header">
-				<h1>
-					My Boards <small>Overview</small>
-				</h1>
-			</div>
-			<div class="row">
-				<div class="col-md-9">
-					<div class="row bbtb-pagination-row">
-						<div class="col-md-6">
-							<uib-pagination ng-change="controller.pageChanged()" boundary-links="true" total-items="controller.totalItems" ng-model="controller.currentPage" class="pagination-sm" rotate="true" max-size="5" force-ellipses="true" items-per-page="controller.itemsPerPage" template-url="listsAndTables/pagination.html"></uib-pagination>
+			<div ng-show="controller.boards != null && user.triedAuthentication && user.isAuthenticated">
+				<div class="page-header">
+					<h1>
+						My Boards <small>Overview</small>
+					</h1>
+				</div>
+				<div class="row">
+					<div class="col-md-9">
+						<div class="row bbtb-pagination-row">
+							<div class="col-md-6">
+								<uib-pagination ng-change="controller.pageChanged()"
+									boundary-links="true" total-items="controller.totalItems"
+									ng-model="controller.currentPage" class="pagination-sm"
+									rotate="true" max-size="5" force-ellipses="true"
+									items-per-page="controller.itemsPerPage"
+									template-url="listsAndTables/pagination.html"></uib-pagination>
+							</div>
+							<div class="col-md-6 bbtb-pagination-buttons">
+								<a href="#" class="btn btn-primary btn-success btn-sm"
+									ng-click="controller.createBoard();"><span
+									class="glyphicon glyphicon-plus"></span> New Board</a>
+							</div>
 						</div>
-						<div class="col-md-6 bbtb-pagination-buttons">
-							<a href="#" class="btn btn-primary btn-success btn-sm" ng-click="controller.createBoard();"><span class="glyphicon glyphicon-plus"></span> New Board</a>
+						<div class="list-group">
+							<a href="board.html?b={{board.uuid}}" class="list-group-item"
+								ng-repeat="board in controller.getBoardsPaginated()">
+								<h4 class="list-group-item-heading">{{board.name}}</h4>
+								<p class="list-group-item-text">{{board.race1.name}} vs
+									{{board.race2.name}}</p>
+							</a>
 						</div>
-					</div>
-					<div class="list-group">
-						<a href="board.html?b={{board.uuid}}" class="list-group-item"
-							ng-repeat="board in controller.getBoardsPaginated()">
-							<h4 class="list-group-item-heading">{{board.name}}</h4>
-							<p class="list-group-item-text">{{board.race1.name}} vs {{board.race2.name}}</p>
-						</a>
 					</div>
 				</div>
 			</div>

@@ -13,11 +13,9 @@ define([ 'angular' ], function(angular) {
 				this.currentPage = 1;
 				
 				this.itemsPerPage = 5;
-
-				initializeMyBoards = function(user) {
-					loadMyBoards();
-				};
 				
+				this.initialized = false;
+
 				loadMyBoards = function() {
 					$http.get('bbtb/api/boards/my').
 					success(function(data, status, headers, config) {
