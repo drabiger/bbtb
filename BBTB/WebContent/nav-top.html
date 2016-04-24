@@ -15,6 +15,7 @@
 			</button>
 			<a ng-hide="user.isAuthenticated" class="navbar-brand" href="#">Blood Bowl Tactics Board</a>
 			<a ng-show="user.isAuthenticated" class="navbar-brand" href="#" onclick="location.replace('/myBoards.html');">Blood Bowl Tactics Board</a>
+			<span class="navbar-text" ng-show="pageTitle"> {{pageTitle}}</span>
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<div ng-hide="user.isAuthenticated">

@@ -51,6 +51,10 @@ define(['angular', 'bbtb/login'], function(angular, login) {
 		$scope.redirectToWelcomePage = redirect; 
 	 };
 	 
+	 $scope.setPage = function(title) {
+		$scope.pageTitle = title; 
+	 };
+	 
 	 this.loadCurrentBBTBUser = function() {
 		 // try login based on http session		 
 		 $http.get('bbtb/api/users/@me').

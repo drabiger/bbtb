@@ -12,7 +12,7 @@
 	src="js/lib/require.js"></script>
 
 <body>
-	<div class="container" ng-controller="UserController as user" ng-init="setRedirect(true)">
+	<div class="container" ng-controller="UserController as user" ng-init="setRedirect(true); setPage('My Boards');">
 		<div class="container"
 			ng-controller="MyBoardsController as controller">
 			<div ng-include="'nav-top.html'" class="navbarInclude"></div>
@@ -22,7 +22,6 @@
 			<div ng-show="controller.boards != null && user.triedAuthentication && user.isAuthenticated">
 				<div class="page-header">
 					<h1>
-						My Boards <small>Overview</small>
 					</h1>
 				</div>
 				<div class="row">

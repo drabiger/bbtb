@@ -19,7 +19,7 @@
   		</a>
   		<div id="errorMessage"><strong>Error!</strong> test</div> 
   	</div>
-	<div class="container" ng-controller="UserController as user" ng-init="setRedirect(true)">
+	<div class="container" ng-controller="UserController as user" ng-init="setRedirect(true); setPage('Edit Board');">
 		<div class="container" ng-controller="BoardController as controller">
 			<div ng-include="'nav-top.html'"></div>
 			<div ng-hide="user.isAuthenticated" class="row">
