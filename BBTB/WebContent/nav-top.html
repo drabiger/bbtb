@@ -32,6 +32,7 @@
 								class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="#">Settings</a></li>
+								<li><a href="#" data-toggle="modal" data-target="#creditsModal">Credits</a></li>
 								<li><a href="#">Logout</a></li>
 							</ul></li>
 					</ul>
@@ -40,22 +41,4 @@
 		</div>
 	</div>
 </nav>
-<div id="bbtb-userCreation">
-	<div class="modal fade" id="myModal" role="dialog">
-		<div class="modal-dialog">
-			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Modal Header</h4>
-				</div>
-				<div class="modal-body">
-					<p>Some text in the modal.</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+<div ng-include="'creditsModal.html'"></div>
