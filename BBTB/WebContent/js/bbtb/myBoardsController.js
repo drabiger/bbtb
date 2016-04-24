@@ -16,6 +16,10 @@ define([ 'angular' ], function(angular) {
 				
 				this.initialized = false;
 
+				initializeMyBoards = function(user) {
+					loadMyBoards();
+				};
+
 				loadMyBoards = function() {
 					$http.get('bbtb/api/boards/my').
 					success(function(data, status, headers, config) {
